@@ -20,10 +20,9 @@ class MPRISPlayer {
       process.exit(1);
     }
 
-    let fpsMultiplier = 0.5; // oh shut up
-    if (timeSeconds < 90) {
-      fpsMultiplier = 1;
-    }
+    const fpsMultiplier = timeSeconds < 90
+      ? 1
+      : 1 / (timeSeconds / 90);
 
     this.interval = 1000 / FPS * fpsMultiplier; // fork and do better
     this.name = name;

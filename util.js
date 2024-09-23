@@ -9,7 +9,7 @@ export async function makeProgressCircle(_progress) {
   if (isNaN(progress) || !progress)
     progress = 0;
 
-  const filename = path.resolve('/', 'tmp', '.mpris-timer', `x.${progress}.svg`);
+  const filename = path.resolve('/', 'tmp', '.mpris-timer', `_.${progress}.svg`);
 
   if (await exists(filename)) {
     return filename;

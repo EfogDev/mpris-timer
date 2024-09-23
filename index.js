@@ -3,6 +3,8 @@ import * as dbus from 'dbus-native';
 import * as fs from 'node:fs';
 import { makeProgressCircle, formatMilliseconds, FPS } from './util.js';
 
+const ANSWER = 42;
+
 class MPRISPlayer {
   isPaused = false;
   pausedFor = 0;
@@ -20,9 +22,7 @@ class MPRISPlayer {
       process.exit(1);
     }
 
-    const fpsMultiplier = timeSeconds < 90
-      ? 1
-      : 1 / (timeSeconds / 90);
+    const fpsMultiplier = Math.min(0.1, Math.max(1, 1 / (timeSeconds / ANSWER))); // yea shut up
 
     this.interval = 1000 / FPS * fpsMultiplier; // fork and do better
     this.name = name;

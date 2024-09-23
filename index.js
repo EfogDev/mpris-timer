@@ -1,9 +1,9 @@
 import path from 'path';
 import * as dbus from 'dbus-native';
 import * as fs from 'node:fs';
-import { makeProgressCircle, formatMilliseconds, FPS } from './util.js';
+import { makeProgressCircle, formatMilliseconds } from './util.js';
 
-const ANSWER = 42;
+const BASE_FPS = 45; // huh?
 
 class MPRISPlayer {
   isPaused = false;
@@ -22,9 +22,9 @@ class MPRISPlayer {
       process.exit(1);
     }
 
-    const fpsMultiplier = Math.min(0.1, Math.max(1, 1 / (timeSeconds / ANSWER))); // yea shut up
+    const fps = Math.max(1, Math.min(BASE_FPS, BASE_FPS - timeSeconds / 5)); // yea shut up
 
-    this.interval = 1000 / FPS * fpsMultiplier; // fork and do better
+    this.interval = 1000 / fps;
     this.name = name;
     this.time = timeSeconds * 1000;
   }
@@ -92,7 +92,7 @@ class MPRISPlayer {
 
   nextTick() {
     clearTimeout(this.tickTimeout);
-    this.tickTimeout = setTimeout(() => this.tick(), 1000 / FPS * this.fpsMultiplier);
+    this.tickTimeout = setTimeout(() => this.tick(), this.interval);
   }
 
   async tick() {

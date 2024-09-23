@@ -1,8 +1,7 @@
 import { exists, writeFile } from 'node:fs/promises';
 import path from 'path';
 
-// export const FPS = 1;
-export const FPS = 24; // Huh?
+let svgImage = '';
 
 export async function makeProgressCircle(_progress) {
   let progress = (Math.max(0, Math.min(100, _progress))).toFixed(1);
@@ -25,7 +24,7 @@ export async function makeProgressCircle(_progress) {
   const radius = width / 2 - strokeWidth - padding;
   const baseWidth = Math.floor(strokeWidth * 0.25);
 
-  const svgImage = `
+  svgImage = `
     <svg width="${width}" height="${height}">
       <circle 
         cx="${centerX}" 

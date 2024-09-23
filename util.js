@@ -9,7 +9,7 @@ export async function makeProgressCircle(_progress) {
   if (isNaN(progress) || !progress)
     progress = 0;
 
-  const filename = path.resolve('/', 'tmp', '.mpris-timer', `_.${progress}.svg`);
+  const filename = path.resolve('/', 'tmp', '.mpris-timer', `_c.${progress}.svg`);
 
   if (await exists(filename)) {
     return filename;
@@ -26,6 +26,7 @@ export async function makeProgressCircle(_progress) {
 
   const red = Math.min(255, Math.floor(255 * (progress / 100)));
   const green = Math.min(255, Math.floor(255 * ((100 - progress) / 100)));
+  // stroke="rgb(${red},${green},64)"
 
   svgImage = `
     <svg width="${width}" height="${height}">
@@ -42,7 +43,7 @@ export async function makeProgressCircle(_progress) {
         cy="${centerY}" 
         r="${radius}" 
         fill="none"
-        stroke="rgb(${red},${green},64)"
+        stroke="#2190a4"
         stroke-width="${strokeWidth}"
         stroke-dasharray="${2 * Math.PI * radius}"
         stroke-dashoffset="${2 * Math.PI * radius * (1 - progress / 100)}"

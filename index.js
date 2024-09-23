@@ -85,13 +85,13 @@ class MPRISPlayer {
     });
   }
 
-  async tick() {
-    const nextTick = () => {
-      this.tickTimeout = setTimeout(() => this.tick(), 1000 / FPS);
-    }
+  nextTick() {
+    this.tickTimeout = setTimeout(() => this.tick(), 1000 / FPS);
+  }
 
+  async tick() {
     if (this.isPaused) {
-      return nextTick();
+      return this.nextTick();
     }
 
     const timeDiff = Date.now() - this.startTime - this.pausedFor;
@@ -110,7 +110,7 @@ class MPRISPlayer {
     titleField[1] = [ formatMilliseconds(timeLeft) ];
 
     this.emitMetadata();
-    nextTick();
+    this.nextTick();
   }
 
   emitMetadata() {

@@ -86,6 +86,7 @@ class MPRISPlayer {
   }
 
   nextTick() {
+    clearTimeout(this.tickTimeout);
     this.tickTimeout = setTimeout(() => this.tick(), 1000 / FPS);
   }
 

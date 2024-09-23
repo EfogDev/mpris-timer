@@ -2,7 +2,7 @@ import { exists, writeFile } from 'node:fs/promises';
 import path from 'path';
 
 // export const FPS = 1;
-export const FPS = 30; // Huh?
+export const FPS = 18; // Huh?
 
 export async function makeProgressCircle(_progress) {
   let progress = (Math.max(0, Math.min(100, _progress))).toFixed(1);

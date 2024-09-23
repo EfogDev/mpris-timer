@@ -20,6 +20,12 @@ class MPRISPlayer {
       process.exit(1);
     }
 
+    let fpsMultiplier = 0.5; // oh shut up
+    if (timeSeconds < 90) {
+      fpsMultiplier = 1;
+    }
+
+    this.interval = 1000 / FPS * fpsMultiplier; // fork and do better
     this.name = name;
     this.time = timeSeconds * 1000;
   }
@@ -87,7 +93,7 @@ class MPRISPlayer {
 
   nextTick() {
     clearTimeout(this.tickTimeout);
-    this.tickTimeout = setTimeout(() => this.tick(), 1000 / FPS);
+    this.tickTimeout = setTimeout(() => this.tick(), 1000 / FPS * this.fpsMultiplier);
   }
 
   async tick() {

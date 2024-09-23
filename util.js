@@ -1,5 +1,4 @@
-import sharp from 'sharp';
-import { exists } from 'node:fs/promises';
+import { exists, writeFile } from 'node:fs/promises';
 import path from 'path';
 
 // export const FPS = 1;
@@ -11,7 +10,7 @@ export async function makeProgressCircle(_progress) {
   if (isNaN(progress) || !progress)
     progress = 0;
 
-  const filename = path.resolve('/', 'tmp', '.mpris-timer', `progress-${progress}.png`);
+  const filename = path.resolve('/', 'tmp', '.mpris-timer', `progress-${progress}.svg`);
 
   if (await exists(filename)) {
     return filename;
@@ -50,19 +49,7 @@ export async function makeProgressCircle(_progress) {
     </svg>
   `;
 
-  const imageOptions = {
-    create: {
-      width: width,
-      height: height,
-      channels: 4,
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
-    },
-  };
-
-  await sharp(imageOptions)
-    .composite([ { input: Buffer.from(svgImage), top: 0, left: 0 } ])
-    .png()
-    .toFile(path.resolve(filename));
+  await writeFile(filename, Buffer.from(svgImage.trim()));
 
   return filename;
 }

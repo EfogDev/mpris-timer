@@ -6,15 +6,8 @@
     "start": "bun index.js",
     "build": "bun build --target=bun --compile ./index.js --outfile=./mpris-timer"
   },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "@types/dbus": "^1.0.9",
-    "dbus-native": "^0.4.0",
-    "sharp": "^0.33.5"
+    "dbus-native": "^0.4.0"
   }
 }

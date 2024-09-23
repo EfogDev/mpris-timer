@@ -35,8 +35,6 @@ convert_to_seconds() {
 
 seconds=$(convert_to_seconds "$choice")
 
-cd /home/efog/Projects/Own/mpris-timer || exit
-
 ./mpris-timer "$seconds"
 if [ $? -eq 0 ]; then
   notify-send -a Clock -i clock -u critical -e "Time is up!"

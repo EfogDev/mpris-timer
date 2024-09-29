@@ -1,6 +1,6 @@
 # MPRIS Timer
 
-![image](https://github.com/user-attachments/assets/499862a1-e6fb-45e2-bf61-027619f764f6)
+![image](https://github.com/user-attachments/assets/d4d9445d-0783-4c84-aa9f-eea20ec5e690)
 
 To install dependencies:
 

@@ -1,5 +1,7 @@
 # MPRIS Timer
 
+![image](https://github.com/user-attachments/assets/499862a1-e6fb-45e2-bf61-027619f764f6)
+
 To install dependencies:
 
 ```bash

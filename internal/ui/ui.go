@@ -196,9 +196,9 @@ func NewContent(result *int) *adw.NavigationPage {
 		startBtn.Activate()
 	}
 
-	setupTimeEntry(hoursLabel, &minutesLabel.Widget, 23, finish)
-	setupTimeEntry(minutesLabel, &secondsLabel.Widget, 59, finish)
-	setupTimeEntry(secondsLabel, &startBtn.Widget, 59, finish)
+	setupTimeEntry(hoursLabel, nil, &minutesLabel.Widget, 23, finish)
+	setupTimeEntry(minutesLabel, &hoursLabel.Widget, &secondsLabel.Widget, 59, finish)
+	setupTimeEntry(secondsLabel, &minutesLabel.Widget, &startBtn.Widget, 59, finish)
 
 	scLabel1 := gtk.NewLabel(":")
 	scLabel1.AddCSSClass("semicolon")

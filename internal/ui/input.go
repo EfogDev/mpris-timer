@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func()) {
+func setupTimeEntry(entry *gtk.Entry, prev *gtk.Widget, next *gtk.Widget, maxVal int, finish func()) {
 	if maxVal <= 0 {
 		maxVal = 59
 	}
@@ -28,7 +28,6 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 	entry.SetVAlign(gtk.AlignCenter)
 	entry.SetAlignment(.5)
 	entry.SetText("00")
-	entry.SelectRegion(0, -1)
 
 	formatValue := func() {
 		val := entry.Text()
@@ -89,7 +88,7 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 		type shortcut struct {
 			keyval []uint
 			mask   gdk.ModifierType
-			fn     func()
+			fn     func() bool
 		}
 
 		// allow some (unhandled) shortcuts
@@ -103,19 +102,57 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 				// space = focus next
 				keyval: []uint{gdk.KEY_space, gdk.KEY_KP_Space},
 				mask:   gdk.NoModifierMask,
-				fn:     formatValue,
+				fn: func() bool {
+					formatValue()
+					return true
+				},
 			},
 			{
 				// enter = start timer
 				keyval: []uint{gdk.KEY_Return, gdk.KEY_KP_Enter, gdk.KEY_ISO_Enter, gdk.KEY_3270_Enter, gdk.KEY_RockerEnter},
 				mask:   gdk.NoModifierMask,
-				fn: func() {
+				fn: func() bool {
 					if finish == nil {
-						return
+						return false
 					}
 
 					formatValue()
 					finish()
+					return true
+				},
+			},
+			{
+				// left = focus prev
+				keyval: []uint{gdk.KEY_Left},
+				mask:   gdk.NoModifierMask,
+				fn: func() bool {
+					if prev == nil {
+						return false
+					}
+
+					_, _, selection := entry.SelectionBounds()
+					if entry.Position() == 0 && !selection {
+						formatValue()
+						prev.GrabFocus()
+						return true
+					}
+
+					return false
+				},
+			},
+			{
+				// right = focus next
+				keyval: []uint{gdk.KEY_Right},
+				mask:   gdk.NoModifierMask,
+				fn: func() bool {
+					_, _, selection := entry.SelectionBounds()
+					if !selection && entry.Position() == len(entry.Text()) {
+						formatValue()
+						next.GrabFocus()
+						return true
+					}
+
+					return false
 				},
 			},
 		}
@@ -123,8 +160,7 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 		for _, cfg := range allowedShortcuts {
 			if slices.Contains(cfg.keyval, keyval) && cfg.mask == state {
 				if cfg.fn != nil {
-					cfg.fn()
-					return true
+					return cfg.fn()
 				}
 
 				return false

@@ -19,13 +19,11 @@ const (
 // RequestNames for possible instances
 var RequestNames = []string{
 	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer",
-
-	// ToDo remove?
-	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-0",
-	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-1",
-	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-2",
-	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-3",
-	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-4",
+	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-0",
+	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-1",
+	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-2",
+	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-3",
+	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-4",
 }
 
 type MPRISPlayer struct {

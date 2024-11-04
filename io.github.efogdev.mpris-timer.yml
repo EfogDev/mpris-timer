@@ -12,6 +12,11 @@ finish-args:
   - --socket=fallback-x11
   - --share=ipc
   - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-0
+  - --talk-name=org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-1
+  - --talk-name=org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-2
+  - --talk-name=org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-3
+  - --talk-name=org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-4
   - --talk-name=org.mpris.MediaPlayer2.Player
 
 modules:

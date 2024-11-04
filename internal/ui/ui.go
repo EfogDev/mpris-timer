@@ -189,13 +189,8 @@ func NewContent(result *int) *adw.NavigationPage {
 	vBox.Append(hBox)
 
 	hoursLabel = gtk.NewEntry()
-	hoursLabel.AddCSSClass("entry")
-
 	minutesLabel = gtk.NewEntry()
-	minutesLabel.AddCSSClass("entry")
-
 	secondsLabel = gtk.NewEntry()
-	secondsLabel.AddCSSClass("entry")
 
 	finish := func() {
 		startBtn.Activate()
@@ -206,10 +201,10 @@ func NewContent(result *int) *adw.NavigationPage {
 	setupTimeEntry(secondsLabel, &startBtn.Widget, 59, finish)
 
 	scLabel1 := gtk.NewLabel(":")
-	scLabel1.AddCSSClass("sc-label")
+	scLabel1.AddCSSClass("semicolon")
 
 	scLabel2 := gtk.NewLabel(":")
-	scLabel2.AddCSSClass("sc-label")
+	scLabel2.AddCSSClass("semicolon")
 
 	hBox.Append(hoursLabel)
 	hBox.Append(scLabel1)

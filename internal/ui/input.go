@@ -15,13 +15,14 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 	}
 
 	entry.AddCSSClass("monospace")
+	entry.AddCSSClass("entry")
+	entry.AddCSSClass("timer-entry")
 	entry.SetSensitive(true)
 	entry.SetCanFocus(true)
 	entry.SetCanTarget(true)
 	entry.SetMaxWidthChars(2)
 	entry.SetWidthChars(2)
 	entry.SetOverflow(gtk.OverflowHidden)
-	entry.AddCSSClass("timer-entry")
 	entry.SetHExpand(false)
 	entry.SetHAlign(gtk.AlignCenter)
 	entry.SetVAlign(gtk.AlignCenter)

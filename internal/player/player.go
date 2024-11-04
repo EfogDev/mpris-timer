@@ -19,11 +19,13 @@ const (
 // RequestNames for possible instances
 var RequestNames = []string{
 	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-0",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-1",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-2",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-3",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-4",
+
+	// ToDo remove?
+	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-0",
+	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-1",
+	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-2",
+	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-3",
+	// "org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-4",
 }
 
 type MPRISPlayer struct {
@@ -190,7 +192,7 @@ func (p *MPRISPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 		case "Identity":
 			return dbus.MakeVariant("MPRIS Timer"), nil
 		case "DesktopEntry":
-			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "mpris-timer.desktop")), nil
+			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", "io.github.efogdev.mpris-timer.desktop")), nil
 		}
 	case "org.mpris.MediaPlayer2.Player":
 		switch prop {
@@ -218,7 +220,7 @@ func (p *MPRISPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error
 	switch iface {
 	case "org.mpris.MediaPlayer2":
 		props["Identity"] = dbus.MakeVariant("MPRIS Timer")
-		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "mpris-timer.desktop"))
+		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", "io.github.efogdev.mpris-timer.desktop"))
 	case "org.mpris.MediaPlayer2.Player":
 		props["PlaybackStatus"] = dbus.MakeVariant(p.playbackStatus)
 		props["CanGoNext"] = dbus.MakeVariant(true)

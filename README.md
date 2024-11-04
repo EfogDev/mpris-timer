@@ -20,7 +20,7 @@ go build -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
 Flatpak:
 ```shell
 go run github.com/dennwc/flatpak-go-mod@latest .
-flatpak-builder --user --force-clean .build io.github.efogdev.mpris-timer.yml
+flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache --mirror-screenshots-url=https://dl.flathub.org/media/ .build io.github.efogdev.mpris-timer.yml
 ```
 
 ## ToDo

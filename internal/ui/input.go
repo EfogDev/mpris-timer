@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int) {
+func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func()) {
 	if maxVal <= 0 {
 		maxVal = 59
 	}
@@ -29,9 +29,7 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int) {
 	entry.SetText("00")
 	entry.SelectRegion(0, -1)
 
-	focusCtrl := gtk.NewEventControllerFocus()
-	focusCtrl.SetPropagationPhase(gtk.PhaseTarget)
-	focusCtrl.ConnectLeave(func() {
+	formatValue := func() {
 		val := entry.Text()
 
 		if len(val) == 0 {
@@ -41,7 +39,12 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int) {
 		if len(val) == 1 {
 			entry.SetText("0" + val)
 		}
+	}
 
+	focusCtrl := gtk.NewEventControllerFocus()
+	focusCtrl.SetPropagationPhase(gtk.PhaseTarget)
+	focusCtrl.ConnectLeave(func() {
+		formatValue()
 		entry.SelectRegion(0, 0)
 	})
 
@@ -54,6 +57,8 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int) {
 			gdk.KEY_Tab,
 			gdk.KEY_ISO_Left_Tab,
 			gdk.KEY_3270_BackTab,
+			gdk.KEY_Return,
+			gdk.KEY_RockerEnter,
 			gdk.KEY_ISO_Enter,
 			gdk.KEY_3270_Enter,
 			gdk.KEY_KP_Enter,
@@ -79,13 +84,38 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int) {
 		// allow some (unhandled) shortcuts
 		allowedShortcuts := []shortcut{
 			{
-				keyval: []uint{gdk.KEY_a}, // ^A = select all
+				// ^A = select all
+				keyval: []uint{gdk.KEY_a},
 				mask:   gdk.ControlMask,
+			},
+			{
+				// space = focus next
+				keyval: []uint{gdk.KEY_space, gdk.KEY_KP_Space},
+				mask:   gdk.NoModifierMask,
+				fn:     formatValue,
+			},
+			{
+				// enter = start timer
+				keyval: []uint{gdk.KEY_Return, gdk.KEY_KP_Enter, gdk.KEY_ISO_Enter, gdk.KEY_3270_Enter, gdk.KEY_RockerEnter},
+				mask:   gdk.NoModifierMask,
+				fn: func() {
+					if finish == nil {
+						return
+					}
+
+					formatValue()
+					finish()
+				},
 			},
 		}
 
 		for _, cfg := range allowedShortcuts {
 			if slices.Contains(cfg.keyval, keyval) && cfg.mask == state {
+				if cfg.fn != nil {
+					cfg.fn()
+					return true
+				}
+
 				return false
 			}
 		}

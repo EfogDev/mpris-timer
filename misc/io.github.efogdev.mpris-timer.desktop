@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=mpris-timer
+Exec=mpris-timer -ui
 Name=MPRIS Timer
 Icon=io.github.efogdev.mpris-timer
 Terminal=false

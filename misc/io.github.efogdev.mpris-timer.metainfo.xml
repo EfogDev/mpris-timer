@@ -4,9 +4,10 @@
 	<url type="homepage">https://github.com/EfogDev/mpris-timer</url>
 	
 	<name>MPRIS Timer</name>
-	<summary>A timer app utilizing libadwaita and MPRIS interface for seamless GNOME integration</summary>
+	<summary>A timer app (CLI/GUI) with seamless GNOME integration, accomplished by pretending to be a player.</summary>
 	<content_rating type="oars-1.1" />
 	<releases>
+		<release date="2024-11-04" version="v0.11">pre-Alpha v0.11.</release>
 		<release date="2024-11-04" version="v0.5">Initial release.</release>
 	</releases>
 	
@@ -21,6 +22,12 @@
 	</supports>
 
 	<description>
+		<p>
+			A timer app (CLI/GUI) with seamless GNOME integration, accomplished by pretending to be a player.
+			Utilizing GTK4, Libadwaita and MPRIS interface. 
+			Ultimately, serves the only purpose — to start a timer quickly and effeciently.
+			Notifications included!
+		</p>
 		<p>
 			MPRIS Timer is really keyboard friendly! It should be quite intuitive. Use navigation (arrows, tab, shift+tab) or start inputting numbers right away. 
 			Use either as a GUI app or as a CLI tool: see `mpris-timer -help`.
@@ -37,7 +44,7 @@
 		</screenshot>
 	</screenshots>
 	
-	<developer id="efogdev@gmail.com">
+	<developer id="io.github.efogdev">
 		<name>Artem Suprun</name>
 	</developer>
 </component>

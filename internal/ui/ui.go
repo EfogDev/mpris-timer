@@ -197,9 +197,13 @@ func NewContent(result *int) *adw.NavigationPage {
 	secondsLabel = gtk.NewEntry()
 	secondsLabel.AddCSSClass("entry")
 
-	setupTimeEntry(hoursLabel, &minutesLabel.Widget, 23)
-	setupTimeEntry(minutesLabel, &secondsLabel.Widget, 59)
-	setupTimeEntry(secondsLabel, &startBtn.Widget, 59)
+	finish := func() {
+		startBtn.Activate()
+	}
+
+	setupTimeEntry(hoursLabel, &minutesLabel.Widget, 23, finish)
+	setupTimeEntry(minutesLabel, &secondsLabel.Widget, 59, finish)
+	setupTimeEntry(secondsLabel, &startBtn.Widget, 59, finish)
 
 	scLabel1 := gtk.NewLabel(":")
 	scLabel1.AddCSSClass("sc-label")

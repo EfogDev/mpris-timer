@@ -11,7 +11,7 @@ func Notify(ctx context.Context, title string, text string) {
 	log.Printf("notify: %s", title)
 
 	var buf bytes.Buffer
-	args := []string{"-a", title, "-i", "clock", "-u", "critical", "-e", text}
+	args := []string{"-a", title, "-i", "io.github.efogdev.mpris-timer", "-u", "critical", "-w", "-e", text, "-A", "Ok"}
 	cmd := exec.CommandContext(ctx, "notify-send", args...)
 	cmd.Stdout = &buf
 

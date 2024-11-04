@@ -22,7 +22,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	flag.BoolVar(&notify, "notify", true, "Send desktop notification")
-	flag.BoolVar(&useUI, "ui", false, "Show timepicker UI")
+	flag.BoolVar(&useUI, "ui", false, "Show timepicker UI (default)")
 	flag.IntVar(&duration, "start", 0, "Start the timer immediately")
 	flag.StringVar(&title, "title", "Timer", "Name/title of the timer")
 	flag.StringVar(&text, "text", "Time is up!", "Notification text")
@@ -31,8 +31,9 @@ func main() {
 	if useUI && duration > 0 {
 		log.Fatalf("UI can't be used with -start")
 	}
+
 	if !useUI && duration == 0 {
-		log.Fatalf("use either -start or -ui")
+		useUI = true
 	}
 
 	if useUI {

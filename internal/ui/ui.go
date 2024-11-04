@@ -112,7 +112,7 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 	flowBox.SetRowSpacing(16)
 	flowBox.AddCSSClass("flow-box")
 
-	for idx, preset := range DefaultPresets {
+	for idx, preset := range util.DefaultPresets {
 		label := gtk.NewLabel(preset)
 		label.SetCursorFromName("pointer")
 		label.AddCSSClass("preset-lbl")
@@ -121,7 +121,7 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 		flowBox.Append(label)
 
 		onActivate := func() {
-			time := fromPreset(preset)
+			time := util.TimeFromPreset(preset)
 
 			if hoursLabel == nil || minutesLabel == nil || secondsLabel == nil {
 				return
@@ -143,7 +143,7 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 		child.ConnectActivate(onActivate)
 		child.AddController(mouseCtrl)
 
-		if preset == defaultPreset {
+		if preset == util.DefaultPreset {
 			flowBox.SelectChild(child)
 			initialPreset = child
 		}
@@ -229,7 +229,7 @@ func NewContent(result *int) *adw.NavigationPage {
 	startBtn.AddCSSClass("suggested-action")
 
 	startFn := func() {
-		time := fromStringParts(hoursLabel.Text(), minutesLabel.Text(), secondsLabel.Text())
+		time := util.TimeFromStrings(hoursLabel.Text(), minutesLabel.Text(), secondsLabel.Text())
 		seconds := time.Hour()*60*60 + time.Minute()*60 + time.Second()
 		if seconds > 0 {
 			*result = seconds

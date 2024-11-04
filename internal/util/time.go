@@ -43,3 +43,26 @@ func TimeFromStrings(hours string, minutes string, seconds string) time.Time {
 
 	return TimeFromParts(hoursInt, minutesInt, secondsInt)
 }
+
+func FormatDuration(d time.Duration) string {
+	d = d.Round(time.Second)
+	h := d / time.Hour
+	d -= h * time.Hour
+	m := d / time.Minute
+	d -= m * time.Minute
+	s := d / time.Second
+
+	if h > 0 {
+		return fmt.Sprintf("%02d:%02d:%02d", h, m, s)
+	}
+
+	return fmt.Sprintf("%02d:%02d", m, s)
+}
+
+func NumToLabelText(num int) string {
+	if num > 59 || num < 0 {
+		log.Fatalf("NumToLabelText: num must be between 0 and 59")
+	}
+
+	return fmt.Sprintf("%02d", num)
+}

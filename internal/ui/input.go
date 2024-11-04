@@ -41,6 +41,16 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 		}
 	}
 
+	clickCtrl := gtk.NewGestureClick()
+	clickCtrl.SetPropagationPhase(gtk.PhaseCapture)
+	clickCtrl.ConnectReleased(func(nPress int, x, y float64) {
+		_, _, ok := entry.SelectionBounds()
+
+		if !ok {
+			entry.SelectRegion(0, -1)
+		}
+	})
+
 	focusCtrl := gtk.NewEventControllerFocus()
 	focusCtrl.SetPropagationPhase(gtk.PhaseTarget)
 	focusCtrl.ConnectLeave(func() {
@@ -48,10 +58,10 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 		entry.SelectRegion(0, 0)
 	})
 
-	ctrl := gtk.NewEventControllerKey()
-	ctrl.SetPropagationPhase(gtk.PhaseCapture)
-	ctrl.SetPropagationLimit(gtk.LimitNone)
-	ctrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
+	kbCtrl := gtk.NewEventControllerKey()
+	kbCtrl.SetPropagationPhase(gtk.PhaseCapture)
+	kbCtrl.SetPropagationLimit(gtk.LimitNone)
+	kbCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
 		// allow some basic keys
 		allowedKeyvals := []uint{
 			gdk.KEY_Tab,
@@ -163,6 +173,7 @@ func setupTimeEntry(entry *gtk.Entry, next *gtk.Widget, maxVal int, finish func(
 		}
 	})
 
-	entry.AddController(ctrl)
+	entry.AddController(kbCtrl)
+	entry.AddController(clickCtrl)
 	entry.AddController(focusCtrl)
 }

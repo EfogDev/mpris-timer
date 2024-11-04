@@ -14,7 +14,6 @@ import (
 )
 
 const (
-	tmpDir        = "/tmp/.mpris-timer"
 	width         = 256
 	height        = 256
 	padding       = 16
@@ -22,6 +21,8 @@ const (
 	fgStrokeColor = "#535353"
 	bgStrokeColor = "#2190a4"
 )
+
+var tmpDir string
 
 type svgParams struct {
 	Width         int
@@ -45,6 +46,8 @@ const svgTemplate = `
 `
 
 func init() {
+	tmpDir, _ = os.UserHomeDir()
+	tmpDir = path.Join(tmpDir, ".var", ".app", "io.github.efogdev.mpris-timer", "cache")
 	_ = os.MkdirAll(tmpDir, 0755)
 }
 

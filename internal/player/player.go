@@ -8,6 +8,7 @@ import (
 	"mpris-timer/internal/util"
 	"os"
 	"path"
+	"strconv"
 	"time"
 )
 
@@ -15,16 +16,6 @@ const (
 	baseFPS      = 25
 	baseInterval = time.Second / baseFPS
 )
-
-// RequestNames for possible instances
-var RequestNames = []string{
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-0",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-1",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-2",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-3",
-	"org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer-4",
-}
 
 type MPRISPlayer struct {
 	Done           chan struct{}
@@ -57,19 +48,19 @@ func NewMPRISPlayer(seconds int, name string) (*MPRISPlayer, error) {
 }
 
 func (p *MPRISPlayer) Start() error {
+	id := strconv.Itoa(int(time.Now().UnixMicro()))[8:]
+
 	conn, err := dbus.SessionBus()
 	if err != nil {
 		return fmt.Errorf("failed to connect to session bus: %w", err)
 	}
 
 	p.conn = conn
+	p.serviceName = fmt.Sprintf("org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer.run-%s", id)
 
-	for _, name := range RequestNames {
-		reply, err := conn.RequestName(name, dbus.NameFlagDoNotQueue)
-		if err == nil && reply == dbus.RequestNameReplyPrimaryOwner {
-			p.serviceName = name
-			break
-		}
+	reply, err := conn.RequestName(p.serviceName, dbus.NameFlagDoNotQueue)
+	if err != nil || reply != dbus.RequestNameReplyPrimaryOwner {
+		return fmt.Errorf("could not request bus: %v", err)
 	}
 
 	if p.serviceName == "" {

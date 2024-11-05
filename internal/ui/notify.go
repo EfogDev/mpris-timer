@@ -28,7 +28,7 @@ func Notify(title string, text string) {
 	// but then default click action is to open timer again
 	// which is not desired
 	nApp := adw.NewApplication(util.AppId, gio.ApplicationNonUnique)
-	_ := nApp.Register(context.Background())
+	_ = nApp.Register(context.Background())
 
 	nApp.ConnectActivate(func() {
 		id, _ := uuid.NewV7()

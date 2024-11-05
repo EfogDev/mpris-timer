@@ -107,6 +107,7 @@ func setupTimeEntry(entry *gtk.Entry, prev *gtk.Widget, next *gtk.Widget, maxVal
 				mask:   gdk.NoModifierMask,
 				fn: func() bool {
 					formatValue()
+					next.GrabFocus()
 					return true
 				},
 			},

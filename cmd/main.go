@@ -23,7 +23,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	flag.BoolVar(&notify, "notify", true, "Send desktop notification")
-	flag.BoolVar(&sound, "sound", true, "Play sound")
+	flag.BoolVar(&sound, "sound", false, "Play sound")
 	flag.BoolVar(&useUI, "ui", false, "Show timepicker UI (default true)")
 	flag.IntVar(&duration, "start", 0, "Start the timer immediately")
 	flag.StringVar(&title, "title", "Timer", "Name/title of the timer")

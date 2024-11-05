@@ -28,9 +28,9 @@ modules:
       - install -Dm644 misc/$FLATPAK_ID.desktop $FLATPAK_DEST/share/applications/$FLATPAK_ID.desktop
       - install -Dm644 misc/$FLATPAK_ID.metainfo.xml $FLATPAK_DEST/share/metainfo/$FLATPAK_ID.metainfo.xml
     sources:
-      - type: dir
-        path: .
-#      - type: git
-#        url: https://github.com/EfogDev/mpris-timer
-#        tag: v0.16
+#      - type: dir
+#        path: .
+      - type: git
+        url: https://github.com/EfogDev/mpris-timer
+        tag: v0.17
       - go.mod.yml

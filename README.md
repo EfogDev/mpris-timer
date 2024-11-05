@@ -5,7 +5,7 @@
 >MPRIS Timer is really keyboard friendly! It should be quite intuitive. \
 >Use navigation (arrows, tab, shift+tab) or start inputting numbers right away.
 
-![ezgif-2-342b92ca02](https://github.com/user-attachments/assets/11e564dc-951e-4cc7-8215-ca1160ee0c0c)
+![ezgif-3-054839fb4c](https://github.com/user-attachments/assets/7994f964-b18e-4254-a141-9b5c149b1483)
 
 Run:
 

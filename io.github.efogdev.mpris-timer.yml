@@ -27,10 +27,11 @@ modules:
       - install -Dm644 internal/ui/icon.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/$FLATPAK_ID.svg
       - install -Dm644 misc/$FLATPAK_ID.desktop $FLATPAK_DEST/share/applications/$FLATPAK_ID.desktop
       - install -Dm644 misc/$FLATPAK_ID.metainfo.xml $FLATPAK_DEST/share/metainfo/$FLATPAK_ID.metainfo.xml
+      - install -Dm644 gtk/$FLATPAK_ID.gschema.xml $FLATPAK_DEST/share/glib-2.0/schemas/$FLATPAK_ID.gschema.xml
     sources:
 #      - type: dir
 #        path: .
       - type: git
         url: https://github.com/EfogDev/mpris-timer
-        tag: v0.17
+        tag: v0.18
       - go.mod.yml

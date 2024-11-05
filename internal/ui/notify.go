@@ -35,7 +35,7 @@ func Notify(title string, text string) {
 
 	nApp.ConnectActivate(func() {
 		id, _ := uuid.NewV7()
-		actionName := "app." + id.String()
+		actionName := "App." + id.String()
 		nApp.AddAction(gio.NewSimpleAction(actionName, nil))
 
 		n := gio.NewNotification(title)

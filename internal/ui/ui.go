@@ -4,7 +4,6 @@ import (
 	_ "embed"
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gdk/v4"
-	"github.com/diamondburned/gotk4/pkg/gio/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"log"
 	"mpris-timer/internal/util"
@@ -23,7 +22,6 @@ const (
 )
 
 var (
-	app           *adw.Application
 	win           *adw.ApplicationWindow
 	initialPreset *gtk.FlowBoxChild
 	startBtn      *gtk.Button
@@ -32,17 +30,10 @@ var (
 	secLabel      *gtk.Entry
 )
 
-func Init(result *int) {
+func Init() {
 	log.Println("started time picker UI")
-	app = adw.NewApplication(util.AppId, gio.ApplicationNonUnique)
 
-	// ToDo for now it seems it isn't required
-	// err := app.Register(context.Background())
-	// if err != nil {
-	// 	log.Printf("error registering application: %v", err)
-	// }
-
-	app.ConnectActivate(func() {
+	util.App.ConnectActivate(func() {
 		prov := gtk.NewCSSProvider()
 		prov.ConnectParsingError(func(sec *gtk.CSSSection, err error) {
 			log.Printf("CSS error: %v", err)
@@ -51,20 +42,16 @@ func Init(result *int) {
 		prov.LoadFromString(cssString)
 		gtk.StyleContextAddProviderForDisplay(gdk.DisplayGetDefault(), prov, gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-		NewTimePicker(app, result)
+		NewTimePicker(util.App)
 	})
 
-	if code := app.Run(nil); code > 0 {
+	if code := util.App.Run(nil); code > 0 {
 		os.Exit(code)
 	}
 }
 
-func NewTimePicker(app *adw.Application, result *int) {
-	if result == nil {
-		log.Fatalf("invalid result pointer")
-	}
-
-	*result = 0
+func NewTimePicker(app *adw.Application) {
+	util.Duration = 0
 	win = adw.NewApplicationWindow(&app.Application)
 	handle := gtk.NewWindowHandle()
 	body := adw.NewOverlaySplitView()
@@ -94,23 +81,33 @@ func NewTimePicker(app *adw.Application, result *int) {
 
 	body.SetVExpand(true)
 	body.SetHExpand(true)
-	body.SetSidebarPosition(gtk.PackEnd)
-	body.SetContent(NewContent(result))
-	body.SetSidebar(NewSidebar(result))
+
+	if util.UserPrefs.PresetsOnRight {
+		body.SetSidebarPosition(gtk.PackEnd)
+	} else {
+		body.SetSidebarPosition(gtk.PackStart)
+	}
+
+	body.SetContent(NewContent())
+	body.SetSidebar(NewSidebar())
 	body.SetSidebarWidthFraction(.35)
 	body.SetEnableShowGesture(true)
 	body.SetEnableHideGesture(true)
+	body.SetShowSidebar(util.UserPrefs.ShowPresets && len(util.UserPrefs.Presets) > 0)
 
 	win.SetVisible(true)
-	initialPreset.Activate()
 	minLabel.SetText("00")
 	secLabel.SetText("00")
 
-	initialPreset.GrabFocus()
+	if initialPreset != nil {
+		initialPreset.Activate()
+		initialPreset.GrabFocus()
+	}
+
 	win.Present()
 }
 
-func NewSidebar(_ *int) *adw.NavigationPage {
+func NewSidebar() *adw.NavigationPage {
 	sidebar := adw.NewNavigationPage(gtk.NewBox(gtk.OrientationVertical, 0), "Presets")
 	flowBox := gtk.NewFlowBox()
 
@@ -120,7 +117,7 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 	flowBox.SetRowSpacing(16)
 	flowBox.AddCSSClass("flow-box")
 
-	for idx, preset := range util.DefaultPresets {
+	for idx, preset := range util.UserPrefs.Presets {
 		label := gtk.NewLabel(preset)
 		label.SetCursorFromName("pointer")
 		label.AddCSSClass("preset-lbl")
@@ -151,12 +148,12 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 		child.ConnectActivate(onActivate)
 		child.AddController(mouseCtrl)
 
-		if preset == util.DefaultPreset {
+		if preset == util.UserPrefs.DefaultPreset {
 			flowBox.SelectChild(child)
 			initialPreset = child
 		}
 
-		if idx == 0 {
+		if idx == 0 && util.UserPrefs.PresetsOnRight {
 			leftKeyCtrl := gtk.NewEventControllerKey()
 			leftKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
 			leftKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
@@ -169,6 +166,21 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 			})
 
 			child.AddController(leftKeyCtrl)
+		}
+
+		if idx == len(util.UserPrefs.Presets)-1 && !util.UserPrefs.PresetsOnRight {
+			rightKeyCtrl := gtk.NewEventControllerKey()
+			rightKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
+			rightKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
+				if keyval == gdk.KEY_Right && state == gdk.NoModifierMask {
+					minLabel.GrabFocus()
+					return true
+				}
+
+				return false
+			})
+
+			child.AddController(rightKeyCtrl)
 		}
 	}
 
@@ -200,7 +212,7 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 	return sidebar
 }
 
-func NewContent(result *int) *adw.NavigationPage {
+func NewContent() *adw.NavigationPage {
 	startBtn = gtk.NewButton()
 
 	vBox := gtk.NewBox(gtk.OrientationVertical, 8)
@@ -255,7 +267,7 @@ func NewContent(result *int) *adw.NavigationPage {
 		time := util.TimeFromStrings(hrsLabel.Text(), minLabel.Text(), secLabel.Text())
 		seconds := time.Hour()*60*60 + time.Minute()*60 + time.Second()
 		if seconds > 0 {
-			*result = seconds
+			util.Duration = seconds
 			win.Close()
 			return
 		}
@@ -278,11 +290,29 @@ func NewContent(result *int) *adw.NavigationPage {
 	startBtn.ConnectActivate(startFn)
 	startBtn.AddController(leftKeyCtrl)
 
-	footer := gtk.NewBox(gtk.OrientationHorizontal, 8)
+	prefsBtnContent := adw.NewButtonContent()
+	prefsBtnContent.SetHExpand(false)
+	prefsBtnContent.SetLabel("")
+	prefsBtnContent.SetIconName("settings")
+
+	prefsBtn := gtk.NewButton()
+	prefsBtn.SetChild(prefsBtnContent)
+	prefsBtn.AddCSSClass("control-btn")
+	prefsBtn.AddCSSClass("prefs-btn")
+	prefsBtn.SetFocusable(false)
+
+	prefsBtn.ConnectClicked(func() {
+		NewPrefsWindow()
+	})
+
+	footer := gtk.NewBox(gtk.OrientationHorizontal, 16)
 	footer.SetVAlign(gtk.AlignCenter)
 	footer.SetHAlign(gtk.AlignCenter)
+	footer.SetHExpand(false)
 	footer.SetMarginBottom(16)
+	footer.AddCSSClass("footer")
 	footer.Append(startBtn)
+	footer.Append(prefsBtn)
 	vBox.Append(footer)
 
 	return content

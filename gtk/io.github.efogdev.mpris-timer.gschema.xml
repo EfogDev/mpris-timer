@@ -1,0 +1,45 @@
+<schemalist>
+	<schema id="io.github.efogdev.mpris-timer" path="/io/github/efogdev/mpris-timer/">
+
+		<key name="default-preset" type="s">
+			<default>'01:00'</default>
+		</key>
+
+		<key name="default-title" type="s">
+			<default>'Timer'</default>
+		</key>
+
+		<key name="default-text" type="s">
+			<default>'Time is up!'</default>
+		</key>
+		
+		<key name="show-presets" type="b">
+			<default>true</default>
+		</key>
+
+		<key name="presets-on-right" type="b">
+			<default>false</default>
+		</key>
+
+		<key name="presets" type="as">
+			<default>[ '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '05:00', '07:00', '10:00', '15:00', '20:00', '30:00' ]</default>
+		</key>
+
+		<key name="progress-color" type="s">
+			<default>'#2190a4'</default>
+		</key>
+
+		<key name="enable-sound" type="b">
+			<default>true</default>
+		</key>
+
+		<key name="enable-notification" type="b">
+			<default>true</default>
+		</key>
+
+		<key name="cache-prefix" type="s">
+			<default>'default'</default>
+		</key>
+		
+	</schema>
+</schemalist>

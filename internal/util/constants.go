@@ -1,38 +1,33 @@
 package util
 
+import (
+	"github.com/diamondburned/gotk4/pkg/glib/v2"
+	"os"
+	"path"
+	"strings"
+)
+
 const (
-	AppId         = "io.github.efogdev.mpris-timer"
-	DefaultPreset = "01:00"
+	AppId = "io.github.efogdev.mpris-timer"
 
 	width         = 256
 	height        = 256
 	padding       = 16
 	strokeWidth   = 32
-	fgStrokeColor = "#535353"
-	bgStrokeColor = "#2190a4"
+	bgStrokeColor = "#535353"
 )
-
-var DefaultPresets = []string{
-	"00:30",
-	"01:00",
-	"01:30",
-	"02:00",
-	"02:30",
-	"03:00",
-	"05:00",
-	"07:00",
-	"10:00",
-	"15:00",
-	"20:00",
-	"30:00",
-}
 
 const svgTemplate = `
 <svg width="{{.Width}}" height="{{.Height}}">
-    <circle cx="{{.CenterX}}" cy="{{.CenterY}}" r="{{.Radius}}" fill="none" stroke="{{.FgStrokeColor}}" stroke-width="{{.BaseWidth}}" />
-    <circle cx="{{.CenterX}}" cy="{{.CenterY}}" r="{{.Radius}}" fill="none" stroke="{{.BgStrokeColor}}" stroke-width="{{.StrokeWidth}}" stroke-dasharray="{{.Circumference}}" stroke-dashoffset="{{.DashOffset}}" transform="rotate(-90 {{.CenterX}} {{.CenterY}})" />
+    <circle cx="{{.CenterX}}" cy="{{.CenterY}}" r="{{.Radius}}" fill="none" stroke="{{.BgStrokeColor}}" stroke-width="{{.BaseWidth}}" />
+    <circle cx="{{.CenterX}}" cy="{{.CenterY}}" r="{{.Radius}}" fill="none" stroke="{{.FgStrokeColor}}" stroke-width="{{.StrokeWidth}}" stroke-dasharray="{{.Circumference}}" stroke-dashoffset="{{.DashOffset}}" transform="rotate(-90 {{.CenterX}} {{.CenterY}})" />
 </svg>
 `
+
+var (
+	CacheDir string
+	DataDir  string
+)
 
 type svgParams struct {
 	Width         int
@@ -41,9 +36,22 @@ type svgParams struct {
 	CenterY       int
 	Radius        float64
 	FgStrokeColor string
-	BaseWidth     int
 	BgStrokeColor string
+	BaseWidth     int
 	StrokeWidth   int
 	Circumference float64
 	DashOffset    float64
+}
+
+func init() {
+	DataDir = glib.GetUserDataDir()
+	if !strings.Contains(DataDir, AppId) {
+		DataDir = path.Join(DataDir, AppId)
+	}
+
+	CacheDir, _ = os.UserHomeDir()
+	CacheDir = path.Join(CacheDir, ".var", "app", AppId, "cache")
+
+	_ = os.MkdirAll(CacheDir, 0755)
+	_ = os.MkdirAll(DataDir, 0755)
 }

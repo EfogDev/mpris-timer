@@ -24,13 +24,13 @@
 	<description>
 		<p>
 			A timer app (CLI/GUI) with seamless GNOME integration accomplished by pretending to be a media player.
-			Ultimately, serves the only purpose — to start a timer quickly and effeciently.
+			Ultimately, serves the only purpose — to start a timer quickly and efficiently.
 			Notifications included!
 			Utilizing GTK4, Adwaita and MPRIS interface.
 		</p>
 		<p>
-			MPRIS Timer is really keyboard friendly! It should be quite intuitive. 
-			Use navigation (arrows, tab, shift+tab) or start inputting numbers right away. 
+			MPRIS Timer is keyboard friendly! It should be quite intuitive. 
+			Use navigation (arrows, space, tab, shift+tab) or start inputting numbers right away. 
 			Use either as a GUI app or as a CLI tool: see `mpris-timer -help`.
 		</p>
 	</description>

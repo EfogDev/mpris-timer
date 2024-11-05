@@ -14,7 +14,11 @@
 .control-btn {
 	border-radius: 12px;
 	padding: 6px 20px;
-	margin: 16px 24px;
+	margin: 16px 0;
+}
+
+.footer {
+	margin: 0 24px;
 }
 
 .entry {
@@ -24,4 +28,30 @@
 .semicolon {
 	font-size: 32px;
 	color: #999;
+}
+
+.prefs-inner {
+	padding: 10px 24px 24px;
+}
+
+.presets-list {
+	border-radius: 8px;
+	margin: 12px 0;
+}
+
+.presets-list-item {
+	padding: 2px 8px;
+}
+
+.presets-list-title {
+	font-size: 24px;
+	padding: 12px 8px;
+}
+
+.list-btn {
+	background: transparent;
+}
+
+.color-picker-btn {
+	margin: 8px 0;
 }

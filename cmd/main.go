@@ -2,49 +2,36 @@ package main
 
 import (
 	"context"
-	"flag"
 	"log"
 	"mpris-timer/internal/player"
 	"mpris-timer/internal/ui"
+	"mpris-timer/internal/util"
 	"os"
 	"os/signal"
-)
-
-var (
-	notify   bool
-	sound    bool
-	useUI    bool
-	duration int
-	title    string
-	text     string
 )
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
-	flag.BoolVar(&notify, "notify", true, "Send desktop notification")
-	flag.BoolVar(&sound, "sound", false, "Play sound")
-	flag.BoolVar(&useUI, "ui", false, "Show timepicker UI (default true)")
-	flag.IntVar(&duration, "start", 0, "Start the timer immediately")
-	flag.StringVar(&title, "title", "Timer", "Name/title of the timer")
-	flag.StringVar(&text, "text", "Time is up!", "Notification text")
-	flag.Parse()
+	util.RegisterApp(ctx)
+	util.LoadPrefs()
+	util.LoadFlags()
 
-	if useUI && duration > 0 {
+	if util.UseUI && util.Duration > 0 {
 		log.Fatalf("UI can't be used with -start")
 	}
 
-	if !useUI && duration == 0 {
-		useUI = true
+	if !util.UseUI && util.Duration == 0 {
+		util.UseUI = true
 	}
 
-	if useUI {
+	if util.UseUI {
 		log.Println("UI launched")
-		ui.Init(&duration)
+		ui.Init()
 	}
 
-	log.Printf("timer started: %d sec", duration)
-	timer, err := player.NewMPRISPlayer(duration, title)
+	log.Printf("timer started: %d sec", util.Duration)
+	timer, err := player.NewMPRISPlayer(util.Duration, util.Title)
 	if err != nil {
 		log.Fatalf("failed to create player: %v", err)
 	}
@@ -61,13 +48,13 @@ func main() {
 		log.Println("timer done")
 
 		// note: synchronous
-		if notify {
+		if util.Notify {
 			log.Printf("desktop notification requested")
-			ui.Notify(timer.Name, text)
+			ui.Notify(timer.Name, util.Text)
 		}
 
 		// note: synchronous
-		if sound {
+		if util.Sound {
 			log.Printf("sound requested")
 			err = ui.PlayAudio()
 			if err != nil {

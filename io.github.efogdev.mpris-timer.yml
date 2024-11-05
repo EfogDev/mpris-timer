@@ -32,5 +32,5 @@ modules:
 #        path: .
       - type: git
         url: https://github.com/EfogDev/mpris-timer
-        tag: v0.13
+        tag: v0.14
       - go.mod.yml

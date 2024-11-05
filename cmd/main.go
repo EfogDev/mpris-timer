@@ -59,7 +59,7 @@ func main() {
 		log.Println("timer done")
 
 		if notify {
-			ui.Notify(ctx, timer.Name, text)
+			ui.Notify(timer.Name, text)
 		}
 
 		cancel()

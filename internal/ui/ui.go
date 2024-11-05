@@ -23,18 +23,26 @@ const (
 )
 
 var (
+	app           *adw.Application
 	win           *adw.ApplicationWindow
 	initialPreset *gtk.FlowBoxChild
-	hoursLabel    *gtk.Entry
-	minutesLabel  *gtk.Entry
-	secondsLabel  *gtk.Entry
 	startBtn      *gtk.Button
+	hrsLabel      *gtk.Entry
+	minLabel      *gtk.Entry
+	secLabel      *gtk.Entry
 )
 
 func Init(result *int) {
 	log.Println("started time picker UI")
 
-	app := adw.NewApplication("io.github.efogdev.mpris-timer", gio.ApplicationNonUnique)
+	app = adw.NewApplication("io.github.efogdev.mpris-timer", gio.ApplicationNonUnique)
+
+	// ToDo for now it seems it isn't required
+	// err := app.Register(context.Background())
+	// if err != nil {
+	// 	log.Printf("error registering application: %v", err)
+	// }
+
 	app.ConnectActivate(func() {
 		prov := gtk.NewCSSProvider()
 		prov.ConnectParsingError(func(sec *gtk.CSSSection, err error) {
@@ -96,10 +104,11 @@ func NewTimePicker(app *adw.Application, result *int) {
 
 	win.SetVisible(true)
 	initialPreset.Activate()
-	minutesLabel.SetText("00")
-	secondsLabel.SetText("00")
+	minLabel.SetText("00")
+	secLabel.SetText("00")
 
 	initialPreset.GrabFocus()
+	win.Present()
 }
 
 func NewSidebar(_ *int) *adw.NavigationPage {
@@ -123,13 +132,13 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 		onActivate := func() {
 			time := util.TimeFromPreset(preset)
 
-			if hoursLabel == nil || minutesLabel == nil || secondsLabel == nil {
+			if hrsLabel == nil || minLabel == nil || secLabel == nil {
 				return
 			}
 
-			hoursLabel.SetText(util.NumToLabelText(0))
-			minutesLabel.SetText(util.NumToLabelText(time.Minute()))
-			secondsLabel.SetText(util.NumToLabelText(time.Second()))
+			hrsLabel.SetText(util.NumToLabelText(0))
+			minLabel.SetText(util.NumToLabelText(time.Minute()))
+			secLabel.SetText(util.NumToLabelText(time.Second()))
 			startBtn.SetCanFocus(true)
 			startBtn.GrabFocus()
 		}
@@ -147,6 +156,21 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 			flowBox.SelectChild(child)
 			initialPreset = child
 		}
+
+		if idx == 0 {
+			leftKeyCtrl := gtk.NewEventControllerKey()
+			leftKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
+			leftKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
+				if keyval == gdk.KEY_Left && state == gdk.NoModifierMask {
+					secLabel.GrabFocus()
+					return true
+				}
+
+				return false
+			})
+
+			child.AddController(leftKeyCtrl)
+		}
 	}
 
 	scrolledWindow := gtk.NewScrolledWindow()
@@ -163,10 +187,10 @@ func NewSidebar(_ *int) *adw.NavigationPage {
 			return false
 		}
 
-		minutesLabel.SetText(util.ParseKeyval(keyval))
-		minutesLabel.Activate()
-		minutesLabel.GrabFocus()
-		minutesLabel.SelectRegion(1, 1)
+		minLabel.SetText(util.ParseKeyval(keyval))
+		minLabel.Activate()
+		minLabel.GrabFocus()
+		minLabel.SelectRegion(1, 1)
 
 		return true
 	})
@@ -188,17 +212,17 @@ func NewContent(result *int) *adw.NavigationPage {
 	clamp.SetChild(vBox)
 	vBox.Append(hBox)
 
-	hoursLabel = gtk.NewEntry()
-	minutesLabel = gtk.NewEntry()
-	secondsLabel = gtk.NewEntry()
+	hrsLabel = gtk.NewEntry()
+	minLabel = gtk.NewEntry()
+	secLabel = gtk.NewEntry()
 
 	finish := func() {
 		startBtn.Activate()
 	}
 
-	setupTimeEntry(hoursLabel, nil, &minutesLabel.Widget, 23, finish)
-	setupTimeEntry(minutesLabel, &hoursLabel.Widget, &secondsLabel.Widget, 59, finish)
-	setupTimeEntry(secondsLabel, &minutesLabel.Widget, &startBtn.Widget, 59, finish)
+	setupTimeEntry(hrsLabel, nil, &minLabel.Widget, 23, finish)
+	setupTimeEntry(minLabel, &hrsLabel.Widget, &secLabel.Widget, 59, finish)
+	setupTimeEntry(secLabel, &minLabel.Widget, &startBtn.Widget, 59, finish)
 
 	scLabel1 := gtk.NewLabel(":")
 	scLabel1.AddCSSClass("semicolon")
@@ -206,11 +230,11 @@ func NewContent(result *int) *adw.NavigationPage {
 	scLabel2 := gtk.NewLabel(":")
 	scLabel2.AddCSSClass("semicolon")
 
-	hBox.Append(hoursLabel)
+	hBox.Append(hrsLabel)
 	hBox.Append(scLabel1)
-	hBox.Append(minutesLabel)
+	hBox.Append(minLabel)
 	hBox.Append(scLabel2)
-	hBox.Append(secondsLabel)
+	hBox.Append(secLabel)
 
 	hBox.SetVAlign(gtk.AlignCenter)
 	hBox.SetHAlign(gtk.AlignCenter)
@@ -229,7 +253,7 @@ func NewContent(result *int) *adw.NavigationPage {
 	startBtn.AddCSSClass("suggested-action")
 
 	startFn := func() {
-		time := util.TimeFromStrings(hoursLabel.Text(), minutesLabel.Text(), secondsLabel.Text())
+		time := util.TimeFromStrings(hrsLabel.Text(), minLabel.Text(), secLabel.Text())
 		seconds := time.Hour()*60*60 + time.Minute()*60 + time.Second()
 		if seconds > 0 {
 			*result = seconds
@@ -240,8 +264,20 @@ func NewContent(result *int) *adw.NavigationPage {
 		os.Exit(1)
 	}
 
+	leftKeyCtrl := gtk.NewEventControllerKey()
+	leftKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
+	leftKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
+		if keyval == gdk.KEY_Left && state == gdk.NoModifierMask {
+			secLabel.GrabFocus()
+			return true
+		}
+
+		return false
+	})
+
 	startBtn.ConnectClicked(startFn)
 	startBtn.ConnectActivate(startFn)
+	startBtn.AddController(leftKeyCtrl)
 
 	footer := gtk.NewBox(gtk.OrientationHorizontal, 8)
 	footer.SetVAlign(gtk.AlignCenter)

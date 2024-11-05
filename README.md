@@ -15,7 +15,7 @@ go run cmd/main.go -help
 
 Build:
 ```shell
-go build -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
+go build -tags native,waylan -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
 ```
 
 Flatpak:

@@ -8,7 +8,7 @@ const (
 	fgStrokeColor = "#535353"
 	bgStrokeColor = "#2190a4"
 
-	DefaultPreset = "02:30"
+	DefaultPreset = "01:00"
 )
 
 var DefaultPresets = []string{

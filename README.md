@@ -20,11 +20,5 @@ go build -tags native,waylan -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
 
 Flatpak:
 ```shell
-go run github.com/dennwc/flatpak-go-mod@latest .
 flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache --mirror-screenshots-url=https://dl.flathub.org/media/ .build io.github.efogdev.mpris-timer.yml
 ```
-
-## ToDo
-
-1) Customizable presets
-2) Preferences dialog

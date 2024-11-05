@@ -24,13 +24,13 @@ modules:
       - . /usr/lib/sdk/golang/enable.sh; export GOPATH=$PWD; go env -w GO111MODULE=off
       - go build -tags wayland,flatpak -trimpath -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
       - install -Dm755 .bin/app $FLATPAK_DEST/bin/mpris-timer
-      - install -Dm644 internal/ui/icon.svg /app/share/icons/hicolor/scalable/apps/$FLATPAK_ID.svg
-      - install -Dm644 misc/$FLATPAK_ID.desktop /app/share/applications/$FLATPAK_ID.desktop
-      - install -Dm644 misc/$FLATPAK_ID.metainfo.xml /app/share/metainfo/$FLATPAK_ID.metainfo.xml
+      - install -Dm644 internal/ui/icon.svg $FLATPAK_DEST/share/icons/hicolor/scalable/apps/$FLATPAK_ID.svg
+      - install -Dm644 misc/$FLATPAK_ID.desktop $FLATPAK_DEST/share/applications/$FLATPAK_ID.desktop
+      - install -Dm644 misc/$FLATPAK_ID.metainfo.xml $FLATPAK_DEST/share/metainfo/$FLATPAK_ID.metainfo.xml
     sources:
-#      - type: dir
-#        path: .
-      - type: git
-        url: https://github.com/EfogDev/mpris-timer
-        tag: v0.15
+      - type: dir
+        path: .
+#      - type: git
+#        url: https://github.com/EfogDev/mpris-timer
+#        tag: v0.16
       - go.mod.yml

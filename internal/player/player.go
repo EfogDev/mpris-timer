@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	baseFPS      = 25
+	baseFPS      = 30
 	baseInterval = time.Second / baseFPS
 )
 
@@ -56,7 +56,7 @@ func (p *MPRISPlayer) Start() error {
 	}
 
 	p.conn = conn
-	p.serviceName = fmt.Sprintf("org.mpris.MediaPlayer2.io.github.efogdev.mpris-timer.run-%s", id)
+	p.serviceName = fmt.Sprintf("org.mpris.MediaPlayer2.%s.run-%s", util.AppId, id)
 
 	reply, err := conn.RequestName(p.serviceName, dbus.NameFlagDoNotQueue)
 	if err != nil || reply != dbus.RequestNameReplyPrimaryOwner {
@@ -186,7 +186,7 @@ func (p *MPRISPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 		case "Identity":
 			return dbus.MakeVariant("MPRIS Timer"), nil
 		case "DesktopEntry":
-			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", "io.github.efogdev.mpris-timer.desktop")), nil
+			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop")), nil
 		}
 	case "org.mpris.MediaPlayer2.Player":
 		switch prop {
@@ -214,7 +214,7 @@ func (p *MPRISPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error
 	switch iface {
 	case "org.mpris.MediaPlayer2":
 		props["Identity"] = dbus.MakeVariant("MPRIS Timer")
-		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", "io.github.efogdev.mpris-timer.desktop"))
+		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop"))
 	case "org.mpris.MediaPlayer2.Player":
 		props["PlaybackStatus"] = dbus.MakeVariant(p.playbackStatus)
 		props["CanGoNext"] = dbus.MakeVariant(true)

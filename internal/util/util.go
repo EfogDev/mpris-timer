@@ -3,23 +3,35 @@ package util
 import (
 	"bytes"
 	"fmt"
+	"github.com/diamondburned/gotk4/pkg/glib/v2"
 	"math"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 )
 
-var tmpDir string
+var (
+	CacheDir string
+	DataDir  string
+)
 
 func init() {
-	tmpDir, _ = os.UserHomeDir()
-	tmpDir = path.Join(tmpDir, ".var", "app", "io.github.efogdev.mpris-timer", "cache")
-	_ = os.MkdirAll(tmpDir, 0755)
+	DataDir = glib.GetUserDataDir()
+	if !strings.Contains(DataDir, AppId) {
+		DataDir = path.Join(DataDir, AppId)
+	}
+
+	CacheDir, _ = os.UserHomeDir()
+	CacheDir = path.Join(CacheDir, ".var", "app", AppId, "cache")
+
+	_ = os.MkdirAll(CacheDir, 0755)
+	_ = os.MkdirAll(DataDir, 0755)
 }
 
 func MakeProgressCircle(progress float64) (string, error) {
 	progress = math.Max(0, math.Min(100, progress))
-	filename := path.Join(tmpDir, fmt.Sprintf("_f4g.%.1f.svg", progress))
+	filename := path.Join(CacheDir, fmt.Sprintf("_f4g.%.1f.svg", progress))
 
 	if _, err := os.Stat(filename); err == nil {
 		return filename, nil

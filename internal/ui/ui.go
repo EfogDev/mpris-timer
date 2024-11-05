@@ -34,8 +34,7 @@ var (
 
 func Init(result *int) {
 	log.Println("started time picker UI")
-
-	app = adw.NewApplication("io.github.efogdev.mpris-timer", gio.ApplicationNonUnique)
+	app = adw.NewApplication(util.AppId, gio.ApplicationNonUnique)
 
 	// ToDo for now it seems it isn't required
 	// err := app.Register(context.Background())

@@ -1,14 +1,15 @@
 package util
 
 const (
+	AppId         = "io.github.efogdev.mpris-timer"
+	DefaultPreset = "01:00"
+
 	width         = 256
 	height        = 256
 	padding       = 16
 	strokeWidth   = 32
 	fgStrokeColor = "#535353"
 	bgStrokeColor = "#2190a4"
-
-	DefaultPreset = "01:00"
 )
 
 var DefaultPresets = []string{

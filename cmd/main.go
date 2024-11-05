@@ -12,6 +12,7 @@ import (
 
 var (
 	notify   bool
+	sound    bool
 	useUI    bool
 	duration int
 	title    string
@@ -22,7 +23,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	flag.BoolVar(&notify, "notify", true, "Send desktop notification")
-	flag.BoolVar(&useUI, "ui", false, "Show timepicker UI (default)")
+	flag.BoolVar(&sound, "sound", true, "Play sound")
+	flag.BoolVar(&useUI, "ui", false, "Show timepicker UI (default true)")
 	flag.IntVar(&duration, "start", 0, "Start the timer immediately")
 	flag.StringVar(&title, "title", "Timer", "Name/title of the timer")
 	flag.StringVar(&text, "text", "Time is up!", "Notification text")
@@ -58,8 +60,19 @@ func main() {
 	case <-timer.Done:
 		log.Println("timer done")
 
+		// note: synchronous
 		if notify {
+			log.Printf("desktop notification requested")
 			ui.Notify(timer.Name, text)
+		}
+
+		// note: synchronous
+		if sound {
+			log.Printf("sound requested")
+			err = ui.PlayAudio()
+			if err != nil {
+				log.Printf("error playing sound file: %v", err)
+			}
 		}
 
 		cancel()

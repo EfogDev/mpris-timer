@@ -67,6 +67,7 @@ func main() {
 		log.Println("interrupt received")
 		cancel()
 	case <-ctx.Done():
+		timer.Destroy()
 		log.Println("context done")
 		return
 	}

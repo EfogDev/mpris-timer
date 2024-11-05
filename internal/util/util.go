@@ -13,7 +13,7 @@ var tmpDir string
 
 func init() {
 	tmpDir, _ = os.UserHomeDir()
-	tmpDir = path.Join(tmpDir, ".var", ".app", "io.github.efogdev.mpris-timer", "cache")
+	tmpDir = path.Join(tmpDir, ".var", "app", "io.github.efogdev.mpris-timer", "cache")
 	_ = os.MkdirAll(tmpDir, 0755)
 }
 

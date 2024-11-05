@@ -77,6 +77,11 @@ func (p *MPRISPlayer) Start() error {
 	return nil
 }
 
+func (p *MPRISPlayer) Destroy() {
+	p.conn.Close()
+	close(p.Done)
+}
+
 func (p *MPRISPlayer) exportInterfaces() error {
 	if err := p.conn.Export(p, p.objectPath, "org.mpris.MediaPlayer2"); err != nil {
 		return err

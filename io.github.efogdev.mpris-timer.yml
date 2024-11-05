@@ -11,9 +11,6 @@ finish-args:
   - --socket=wayland
   - --socket=fallback-x11
   - --share=ipc
-  - --filesystem=~/.var/app:create
-  - --talk-name=org.freedesktop.Notifications
-  - --talk-name=org.mpris.MediaPlayer2.Player
 
 modules:
   - name: mpris-timer

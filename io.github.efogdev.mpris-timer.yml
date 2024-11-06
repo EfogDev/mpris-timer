@@ -1,8 +1,8 @@
-id: io.github.efogdev.core-timer
+id: io.github.efogdev.mpris-timer
 runtime: org.gnome.Platform
 runtime-version: "47"
 sdk: org.gnome.Sdk
-command: core-timer
+command: mpris-timer
 
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.golang
@@ -14,7 +14,7 @@ finish-args:
   - --share=ipc
 
 modules:
-  - name: core-timer
+  - name: mpris-timer
     buildsystem: simple
     build-options:
       append-path: /usr/lib/sdk/golang/bin

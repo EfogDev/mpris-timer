@@ -20,6 +20,7 @@ func RegisterApp(ctx context.Context) {
 }
 
 func ClearCache() {
+	// ToDo cleanup
 	id, _ := uuid.NewV7()
 	SetCachePrefix(id.String())
 }

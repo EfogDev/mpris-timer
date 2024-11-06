@@ -27,24 +27,31 @@ func Notify(title string, text string) {
 	// a workaround; could've used notify-send
 	// but then default click action is to open timer again
 	// which is not desired
-	nApp := adw.NewApplication(util.AppId, gio.ApplicationNonUnique)
-	_ = nApp.Register(context.Background())
+	if !util.UseUI {
+		SendNotification(util.App, title, text)
+	} else {
+		nApp := adw.NewApplication(util.AppId, gio.ApplicationNonUnique)
+		nApp.ConnectActivate(func() {
+			SendNotification(nApp, title, text)
+		})
 
-	nApp.ConnectActivate(func() {
-		id, _ := uuid.NewV7()
-		actionName := "App." + id.String()
-		nApp.AddAction(gio.NewSimpleAction(actionName, nil))
+		_ = nApp.Register(context.Background())
+		nApp.Run(nil)
+	}
+}
 
-		n := gio.NewNotification(title)
-		n.SetBody(text)
-		n.SetPriority(gio.NotificationPriorityUrgent)
-		n.SetDefaultAction(actionName)
-		n.SetIcon(gio.NewBytesIcon(glib.NewBytes(icon)))
+func SendNotification(app *adw.Application, title string, text string) {
+	id, _ := uuid.NewV7()
+	actionName := "app." + id.String()
+	app.AddAction(gio.NewSimpleAction(actionName, nil))
 
-		nApp.SendNotification(id.String(), n)
-	})
+	n := gio.NewNotification(title)
+	n.SetBody(text)
+	n.SetPriority(gio.NotificationPriorityUrgent)
+	n.SetDefaultAction(actionName)
+	n.SetIcon(gio.NewBytesIcon(glib.NewBytes(icon)))
 
-	nApp.Run(nil)
+	app.SendNotification(id.String(), n)
 }
 
 func PlayAudio() error {

@@ -10,6 +10,7 @@ sdk-extensions:
 finish-args:
   - --socket=wayland
   - --socket=fallback-x11
+  - --socket=pulseaudio 
   - --share=ipc
 
 modules:
@@ -30,9 +31,9 @@ modules:
       - install -Dm644 gtk/$FLATPAK_ID.gschema.xml $FLATPAK_DEST/share/glib-2.0/schemas/$FLATPAK_ID.gschema.xml
       - glib-compile-schemas $FLATPAK_DEST/share/glib-2.0/schemas
     sources:
-      - type: dir
-        path: .
-#      - type: git
-#        url: https://github.com/EfogDev/mpris-timer
-#        tag: v0.18
+#      - type: dir
+#        path: .
+      - type: git
+        url: https://github.com/efogdev/mpris-timer
+        tag: v0.19
       - go.mod.yml

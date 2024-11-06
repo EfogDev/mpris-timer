@@ -5,8 +5,8 @@ A timer app (CLI/GUI) with seamless GNOME integration accomplished by pretending
 Ultimately, serves the only purpose — to start a timer quickly and efficiently. \
 Notifications included! Utilizing GTK4, Adwaita and MPRIS interface.
 
->MPRIS Timer is really keyboard friendly! It should be quite intuitive. \
->Use navigation (arrows, tab, shift+tab) or start inputting numbers right away.
+>MPRIS Timer aims to be as keyboard friendly as possible.
+>Use navigation keys (arrows, tab, shift+tab, space, enter) or start inputting numbers right away.
 
 ![image](https://github.com/user-attachments/assets/80c40dee-1a2f-4729-8f9b-89e5eeb934b9)
 

@@ -49,6 +49,7 @@ func NewTimerPlayer(seconds int, name string) (*TimerPlayer, error) {
 
 func (p *TimerPlayer) Start() error {
 	id := strconv.Itoa(int(time.Now().UnixMicro()))[8:]
+	log.Printf("timer %v starting", id)
 
 	conn, err := dbus.SessionBus()
 	if err != nil {
@@ -67,7 +68,7 @@ func (p *TimerPlayer) Start() error {
 		return fmt.Errorf("could not find free service name")
 	}
 
-	if err := p.exportInterfaces(); err != nil {
+	if err = p.exportInterfaces(); err != nil {
 		return fmt.Errorf("failed to export interfaces: %w", err)
 	}
 
@@ -78,7 +79,7 @@ func (p *TimerPlayer) Start() error {
 }
 
 func (p *TimerPlayer) Destroy() {
-	p.conn.Close()
+	_ = p.conn.Close()
 	close(p.Done)
 }
 

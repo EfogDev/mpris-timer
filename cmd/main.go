@@ -31,13 +31,13 @@ func main() {
 		ui.Init()
 	}
 
-	log.Printf("timer started: %d sec", util.Duration)
 	timer, err := core.NewTimerPlayer(util.Duration, util.Title)
 	if err != nil {
 		log.Fatalf("failed to create timer: %v", err)
 	}
 
-	if err := timer.Start(); err != nil {
+	log.Printf("timer started: %d sec", util.Duration)
+	if err = timer.Start(); err != nil {
 		log.Fatalf("failed to start timer: %v", err)
 	}
 
@@ -73,11 +73,9 @@ func main() {
 		wg.Wait()
 		cancel()
 	case <-sigChan:
-		log.Println("interrupt received")
 		cancel()
 	case <-ctx.Done():
 		timer.Destroy()
-		log.Println("context done")
 		return
 	}
 }

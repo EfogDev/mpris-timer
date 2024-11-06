@@ -18,7 +18,7 @@
 		</key>
 
 		<key name="presets-on-right" type="b">
-			<default>false</default>
+			<default>true</default>
 		</key>
 
 		<key name="presets" type="as">

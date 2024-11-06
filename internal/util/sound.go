@@ -35,7 +35,7 @@ func PlaySound() error {
 	player.Play()
 
 	for player.IsPlaying() {
-		time.Sleep(time.Millisecond * 10)
+		time.Sleep(time.Millisecond)
 	}
 
 	return nil
@@ -43,7 +43,7 @@ func PlaySound() error {
 
 func playSilence(ms int) {
 	sampleRate := 44100
-	numSamples := sampleRate * ms / 1000
+	numSamples := sampleRate * ms / 1000 * 2
 	silence := make([]byte, numSamples*2)
 
 	ctx, ready, err := oto.NewContext(sampleRate, 2, 2)

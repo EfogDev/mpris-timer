@@ -22,12 +22,13 @@ func main() {
 		log.Fatalf("UI can't be used with -start")
 	}
 
+	// UI by default
 	if !util.UseUI && util.Duration == 0 {
 		util.UseUI = true
 	}
 
 	if util.UseUI {
-		log.Println("UI launched")
+		log.Println("UI requested")
 		ui.Init()
 	}
 
@@ -36,7 +37,7 @@ func main() {
 		log.Fatalf("failed to create timer: %v", err)
 	}
 
-	log.Printf("timer started: %d sec", util.Duration)
+	log.Printf("timer requested: %d sec", util.Duration)
 	if err = timer.Start(); err != nil {
 		log.Fatalf("failed to start timer: %v", err)
 	}

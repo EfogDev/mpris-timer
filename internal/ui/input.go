@@ -194,7 +194,7 @@ func setupTimeEntry(entry *gtk.Entry, prev *gtk.Widget, next *gtk.Widget, maxVal
 		// section finished
 		newVal, err := strconv.Atoi(val + util.ParseKeyval(keyval))
 		if err != nil {
-			log.Printf("Error converting keyval to int: %v", err)
+			log.Printf("error converting keyval: %v", err)
 			return true
 		}
 

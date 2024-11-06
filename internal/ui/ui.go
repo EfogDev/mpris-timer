@@ -31,7 +31,7 @@ var (
 )
 
 func Init() {
-	log.Println("started time picker UI")
+	log.Println("UI init requested")
 
 	util.App.ConnectActivate(func() {
 		prov := gtk.NewCSSProvider()

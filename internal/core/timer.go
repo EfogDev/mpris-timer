@@ -49,7 +49,7 @@ func NewTimerPlayer(seconds int, name string) (*TimerPlayer, error) {
 
 func (p *TimerPlayer) Start() error {
 	id := strconv.Itoa(int(time.Now().UnixMicro()))[8:]
-	log.Printf("timer %v starting", id)
+	log.Printf("timer %v: start", id)
 
 	conn, err := dbus.SessionBus()
 	if err != nil {
@@ -124,7 +124,7 @@ func (p *TimerPlayer) tick() {
 			timeLeft := p.duration - elapsed
 			progressImg, err := util.MakeProgressCircle(progress)
 			if err != nil {
-				log.Printf("Failed to create progress circle: %v", err)
+				log.Printf("failed to create progress svg: %v", err)
 				continue
 			}
 
@@ -147,7 +147,7 @@ func (p *TimerPlayer) emitPropertiesChanged(iface string, changed map[string]dbu
 	err := p.conn.Emit(p.objectPath, "org.freedesktop.DBus.Properties.PropertiesChanged",
 		iface, changed, []string{})
 	if err != nil {
-		log.Printf("Failed to emit properties changed: %v", err)
+		log.Printf("failed to emit properties: %v", err)
 	}
 }
 

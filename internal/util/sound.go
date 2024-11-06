@@ -24,9 +24,9 @@ func PlaySound() error {
 	}
 	<-ready
 
-	if Presilence != 0 {
-		log.Printf("presilence requested")
-		playSilence(Presilence)
+	if Silence != 0 {
+		log.Printf("silence requested")
+		playSilence(Silence)
 	}
 
 	player := ctx.NewPlayer(dec)
@@ -35,13 +35,15 @@ func PlaySound() error {
 	player.Play()
 
 	for player.IsPlaying() {
-		time.Sleep(time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 	}
 
 	return nil
 }
 
 func playSilence(ms int) {
+	log.Printf("silence start: %v", time.Now().UnixMilli())
+
 	sampleRate := 44100
 	numSamples := sampleRate * ms / 1000 * 2
 	silence := make([]byte, numSamples*2)
@@ -60,4 +62,6 @@ func playSilence(ms int) {
 	for player.IsPlaying() {
 		time.Sleep(time.Millisecond)
 	}
+
+	log.Printf("silence end: %v", time.Now().UnixMilli())
 }

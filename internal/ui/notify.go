@@ -21,11 +21,11 @@ func Notify(title string, text string) {
 	// but then default click action is to open timer again
 	// which is not desired
 	if !util.UseUI {
-		SendNotification(util.App, title, text)
+		sendNotification(util.App, title, text)
 	} else {
 		nApp := adw.NewApplication(util.AppId, gio.ApplicationNonUnique)
 		nApp.ConnectActivate(func() {
-			SendNotification(nApp, title, text)
+			sendNotification(nApp, title, text)
 		})
 
 		_ = nApp.Register(context.Background())
@@ -33,7 +33,7 @@ func Notify(title string, text string) {
 	}
 }
 
-func SendNotification(app *adw.Application, title string, text string) {
+func sendNotification(app *adw.Application, title string, text string) {
 	id, _ := uuid.NewV7()
 	actionName := "app." + id.String()
 	app.AddAction(gio.NewSimpleAction(actionName, nil))

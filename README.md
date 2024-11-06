@@ -13,7 +13,7 @@ Notifications included! Utilizing GTK4, Adwaita and MPRIS interface.
 ## Installation
 
 ```shell
-flatpak install --user flathub io.github.efogdev.mpris-timer
+flatpak install --user flathub io.github.efogdev.core-timer
 ```
 
 ## Preview
@@ -35,5 +35,5 @@ go build -tags native,waylan -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
 
 Flatpak:
 ```shell
-flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache .build io.github.efogdev.mpris-timer.yml
+flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache .build io.github.efogdev.core-timer.yml
 ```

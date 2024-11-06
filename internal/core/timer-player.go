@@ -1,4 +1,4 @@
-package player
+package core
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ const (
 	baseInterval = time.Second / baseFPS
 )
 
-type MPRISPlayer struct {
+type TimerPlayer struct {
 	Done           chan struct{}
 	Name           string
 	serviceName    string
@@ -32,12 +32,12 @@ type MPRISPlayer struct {
 	playbackStatus string
 }
 
-func NewMPRISPlayer(seconds int, name string) (*MPRISPlayer, error) {
+func NewTimerPlayer(seconds int, name string) (*TimerPlayer, error) {
 	if seconds <= 0 {
 		return nil, fmt.Errorf("duration must be positive")
 	}
 
-	return &MPRISPlayer{
+	return &TimerPlayer{
 		Name:           name,
 		duration:       time.Duration(seconds) * time.Second,
 		objectPath:     "/org/mpris/MediaPlayer2",
@@ -47,7 +47,7 @@ func NewMPRISPlayer(seconds int, name string) (*MPRISPlayer, error) {
 	}, nil
 }
 
-func (p *MPRISPlayer) Start() error {
+func (p *TimerPlayer) Start() error {
 	id := strconv.Itoa(int(time.Now().UnixMicro()))[8:]
 
 	conn, err := dbus.SessionBus()
@@ -77,17 +77,17 @@ func (p *MPRISPlayer) Start() error {
 	return nil
 }
 
-func (p *MPRISPlayer) Destroy() {
+func (p *TimerPlayer) Destroy() {
 	p.conn.Close()
 	close(p.Done)
 }
 
-func (p *MPRISPlayer) exportInterfaces() error {
+func (p *TimerPlayer) exportInterfaces() error {
 	if err := p.conn.Export(p, p.objectPath, "org.mpris.MediaPlayer2"); err != nil {
 		return err
 	}
 
-	if err := p.conn.Export(p, p.objectPath, "org.mpris.MediaPlayer2.Player"); err != nil {
+	if err := p.conn.Export(p, p.objectPath, "org.mpris.MediaPlayer2.TimerPlayer"); err != nil {
 		return err
 	}
 
@@ -98,7 +98,7 @@ func (p *MPRISPlayer) exportInterfaces() error {
 	return nil
 }
 
-func (p *MPRISPlayer) tick() {
+func (p *TimerPlayer) tick() {
 	ticker := time.NewTicker(baseInterval)
 	defer ticker.Stop()
 
@@ -134,7 +134,7 @@ func (p *MPRISPlayer) tick() {
 				"mpris:artUrl":  dbus.MakeVariant("file://" + progressImg),
 			}
 
-			p.emitPropertiesChanged("org.mpris.MediaPlayer2.Player", map[string]dbus.Variant{
+			p.emitPropertiesChanged("org.mpris.MediaPlayer2.TimerPlayer", map[string]dbus.Variant{
 				"Metadata":       dbus.MakeVariant(metadata),
 				"PlaybackStatus": dbus.MakeVariant(p.playbackStatus),
 			})
@@ -142,7 +142,7 @@ func (p *MPRISPlayer) tick() {
 	}
 }
 
-func (p *MPRISPlayer) emitPropertiesChanged(iface string, changed map[string]dbus.Variant) {
+func (p *TimerPlayer) emitPropertiesChanged(iface string, changed map[string]dbus.Variant) {
 	err := p.conn.Emit(p.objectPath, "org.freedesktop.DBus.Properties.PropertiesChanged",
 		iface, changed, []string{})
 	if err != nil {
@@ -150,10 +150,10 @@ func (p *MPRISPlayer) emitPropertiesChanged(iface string, changed map[string]dbu
 	}
 }
 
-func (p *MPRISPlayer) Raise() *dbus.Error { return nil }
-func (p *MPRISPlayer) Quit() *dbus.Error  { os.Exit(0); return nil }
+func (p *TimerPlayer) Raise() *dbus.Error { return nil }
+func (p *TimerPlayer) Quit() *dbus.Error  { os.Exit(0); return nil }
 
-func (p *MPRISPlayer) PlayPause() *dbus.Error {
+func (p *TimerPlayer) PlayPause() *dbus.Error {
 	if p.isPaused {
 		p.pausedFor += time.Since(p.pausedAt)
 	} else {
@@ -162,13 +162,13 @@ func (p *MPRISPlayer) PlayPause() *dbus.Error {
 	p.isPaused = !p.isPaused
 	p.playbackStatus = map[bool]string{true: "Paused", false: "Playing"}[p.isPaused]
 
-	p.emitPropertiesChanged("org.mpris.MediaPlayer2.Player", map[string]dbus.Variant{
+	p.emitPropertiesChanged("org.mpris.MediaPlayer2.TimerPlayer", map[string]dbus.Variant{
 		"PlaybackStatus": dbus.MakeVariant(p.playbackStatus),
 	})
 	return nil
 }
 
-func (p *MPRISPlayer) Previous() *dbus.Error {
+func (p *TimerPlayer) Previous() *dbus.Error {
 	p.startTime = time.Now()
 	p.pausedFor = 0
 	p.isPaused = false
@@ -176,10 +176,10 @@ func (p *MPRISPlayer) Previous() *dbus.Error {
 	return nil
 }
 
-func (p *MPRISPlayer) Next() *dbus.Error { os.Exit(1); return nil }
-func (p *MPRISPlayer) Stop() *dbus.Error { os.Exit(1); return nil }
+func (p *TimerPlayer) Next() *dbus.Error { os.Exit(1); return nil }
+func (p *TimerPlayer) Stop() *dbus.Error { os.Exit(1); return nil }
 
-func (p *MPRISPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
+func (p *TimerPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 	switch iface {
 	case "org.mpris.MediaPlayer2":
 		switch prop {
@@ -188,7 +188,7 @@ func (p *MPRISPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 		case "DesktopEntry":
 			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop")), nil
 		}
-	case "org.mpris.MediaPlayer2.Player":
+	case "org.mpris.MediaPlayer2.TimerPlayer":
 		switch prop {
 		case "PlaybackStatus":
 			return dbus.MakeVariant(p.playbackStatus), nil
@@ -209,13 +209,13 @@ func (p *MPRISPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 	return dbus.Variant{}, nil
 }
 
-func (p *MPRISPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error) {
+func (p *TimerPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error) {
 	props := make(map[string]dbus.Variant)
 	switch iface {
 	case "org.mpris.MediaPlayer2":
 		props["Identity"] = dbus.MakeVariant("MPRIS Timer")
 		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop"))
-	case "org.mpris.MediaPlayer2.Player":
+	case "org.mpris.MediaPlayer2.TimerPlayer":
 		props["PlaybackStatus"] = dbus.MakeVariant(p.playbackStatus)
 		props["CanGoNext"] = dbus.MakeVariant(true)
 		props["CanGoPrevious"] = dbus.MakeVariant(true)
@@ -227,6 +227,6 @@ func (p *MPRISPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error
 	return props, nil
 }
 
-func (p *MPRISPlayer) Set(iface, prop string, value dbus.Variant) *dbus.Error {
+func (p *TimerPlayer) Set(iface, prop string, value dbus.Variant) *dbus.Error {
 	return nil
 }

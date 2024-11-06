@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"log"
-	"mpris-timer/internal/player"
+	"mpris-timer/internal/core"
 	"mpris-timer/internal/ui"
 	"mpris-timer/internal/util"
 	"os"
@@ -32,9 +32,9 @@ func main() {
 	}
 
 	log.Printf("timer started: %d sec", util.Duration)
-	timer, err := player.NewMPRISPlayer(util.Duration, util.Title)
+	timer, err := core.NewTimerPlayer(util.Duration, util.Title)
 	if err != nil {
-		log.Fatalf("failed to create player: %v", err)
+		log.Fatalf("failed to create timer: %v", err)
 	}
 
 	if err := timer.Start(); err != nil {
@@ -49,7 +49,6 @@ func main() {
 		log.Println("timer done")
 		wg := sync.WaitGroup{}
 
-		// note: synchronous
 		if util.Notify {
 			wg.Add(1)
 			log.Printf("desktop notification requested")
@@ -59,7 +58,6 @@ func main() {
 			}()
 		}
 
-		// note: synchronous
 		if util.Sound {
 			wg.Add(1)
 			log.Printf("sound requested")

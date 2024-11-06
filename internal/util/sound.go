@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"github.com/hajimehoshi/go-mp3"
 	"github.com/hajimehoshi/oto/v2"
+	"log"
 	"time"
 )
 
@@ -23,6 +24,11 @@ func PlaySound() error {
 	}
 	<-ready
 
+	if Presilence != 0 {
+		log.Printf("presilence requested")
+		playSilence(Presilence)
+	}
+
 	player := ctx.NewPlayer(dec)
 	defer func() { _ = player.Close() }()
 	player.SetVolume(Volume)
@@ -33,4 +39,25 @@ func PlaySound() error {
 	}
 
 	return nil
+}
+
+func playSilence(ms int) {
+	sampleRate := 44100
+	numSamples := sampleRate * ms / 1000
+	silence := make([]byte, numSamples*2)
+
+	ctx, ready, err := oto.NewContext(sampleRate, 2, 2)
+	if err != nil {
+		log.Fatal(err)
+	}
+	<-ready
+
+	player := ctx.NewPlayer(bytes.NewBuffer(silence))
+	defer func() { _ = player.Close() }()
+	player.SetVolume(1)
+	player.Play()
+
+	for player.IsPlaying() {
+		time.Sleep(time.Millisecond)
+	}
 }

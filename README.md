@@ -10,13 +10,15 @@ Notifications included! Utilizing GTK4, Adwaita and MPRIS interface.
 
 ![image](https://github.com/user-attachments/assets/80c40dee-1a2f-4729-8f9b-89e5eeb934b9)
 
-![ezgif-3-054839fb4c](https://github.com/user-attachments/assets/7994f964-b18e-4254-a141-9b5c149b1483)
-
 ## Installation
 
 ```shell
 flatpak install --user flathub io.github.efogdev.mpris-timer
 ```
+
+## Preview
+
+![ezgif-3-054839fb4c](https://github.com/user-attachments/assets/7994f964-b18e-4254-a141-9b5c149b1483)
 
 ## Development
 

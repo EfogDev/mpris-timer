@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-//go:embed resources/ding.mp3
+//go:embed res/ding.mp3
 var sound []byte
 
 func PlaySound() error {

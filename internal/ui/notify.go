@@ -11,7 +11,7 @@ import (
 	"mpris-timer/internal/util"
 )
 
-//go:embed resources/icon.svg
+//go:embed res/icon.svg
 var icon []byte
 
 func Notify(title string, text string) {

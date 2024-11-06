@@ -8,6 +8,7 @@ import (
 	"mpris-timer/internal/util"
 	"os"
 	"os/signal"
+	"sync"
 )
 
 func main() {
@@ -46,22 +47,32 @@ func main() {
 	select {
 	case <-timer.Done:
 		log.Println("timer done")
+		wg := sync.WaitGroup{}
 
 		// note: synchronous
 		if util.Notify {
+			wg.Add(1)
 			log.Printf("desktop notification requested")
-			ui.Notify(timer.Name, util.Text)
+			go func() {
+				ui.Notify(timer.Name, util.Text)
+				wg.Done()
+			}()
 		}
 
 		// note: synchronous
 		if util.Sound {
+			wg.Add(1)
 			log.Printf("sound requested")
-			err = util.PlaySound()
-			if err != nil {
-				log.Printf("error playing sound file: %v", err)
-			}
+			go func() {
+				err = util.PlaySound()
+				if err != nil {
+					log.Printf("error playing sound file: %v", err)
+				}
+				wg.Done()
+			}()
 		}
 
+		wg.Wait()
 		cancel()
 	case <-sigChan:
 		log.Println("interrupt received")

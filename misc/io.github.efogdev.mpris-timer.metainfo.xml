@@ -4,9 +4,10 @@
 	<url type="homepage">https://github.com/efogdev/mpris-timer</url>
 	
 	<name>MPRIS Timer</name>
-	<summary>A timer app with seamless GNOME integration accomplished by pretending to be a media player.</summary>
+	<summary>A timer app with seamless GNOME integration utilizing media player UI</summary>
 	<content_rating type="oars-1.1" />
 	<releases>
+		<release date="2024-11-06" version="v0.21">Alpha v0.21.</release>
 		<release date="2024-11-04" version="v0.11">pre-Alpha v0.11.</release>
 		<release date="2024-11-04" version="v0.5">Initial release.</release>
 	</releases>
@@ -47,5 +48,6 @@
 	
 	<developer id="io.github.efogdev">
 		<name>Artem Suprun</name>
+		<email>efogdev@gmail.com</email>
 	</developer>
 </component>

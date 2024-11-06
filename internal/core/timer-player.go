@@ -59,7 +59,7 @@ func (p *TimerPlayer) Start() error {
 	p.conn = conn
 	p.serviceName = fmt.Sprintf("org.mpris.MediaPlayer2.%s.run-%s", util.AppId, id)
 
-	reply, err := conn.RequestName(p.serviceName, dbus.NameFlagDoNotQueue)
+	reply, err := conn.RequestName(p.serviceName, dbus.NameFlagAllowReplacement)
 	if err != nil || reply != dbus.RequestNameReplyPrimaryOwner {
 		return fmt.Errorf("could not request bus: %v", err)
 	}
@@ -88,7 +88,7 @@ func (p *TimerPlayer) exportInterfaces() error {
 		return err
 	}
 
-	if err := p.conn.Export(p, p.objectPath, "org.mpris.MediaPlayer2.TimerPlayer"); err != nil {
+	if err := p.conn.Export(p, p.objectPath, "org.mpris.MediaPlayer2.Player"); err != nil {
 		return err
 	}
 
@@ -135,7 +135,7 @@ func (p *TimerPlayer) tick() {
 				"mpris:artUrl":  dbus.MakeVariant("file://" + progressImg),
 			}
 
-			p.emitPropertiesChanged("org.mpris.MediaPlayer2.TimerPlayer", map[string]dbus.Variant{
+			p.emitPropertiesChanged("org.mpris.MediaPlayer2.Player", map[string]dbus.Variant{
 				"Metadata":       dbus.MakeVariant(metadata),
 				"PlaybackStatus": dbus.MakeVariant(p.playbackStatus),
 			})
@@ -163,7 +163,7 @@ func (p *TimerPlayer) PlayPause() *dbus.Error {
 	p.isPaused = !p.isPaused
 	p.playbackStatus = map[bool]string{true: "Paused", false: "Playing"}[p.isPaused]
 
-	p.emitPropertiesChanged("org.mpris.MediaPlayer2.TimerPlayer", map[string]dbus.Variant{
+	p.emitPropertiesChanged("org.mpris.MediaPlayer2.Player", map[string]dbus.Variant{
 		"PlaybackStatus": dbus.MakeVariant(p.playbackStatus),
 	})
 	return nil
@@ -189,7 +189,7 @@ func (p *TimerPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 		case "DesktopEntry":
 			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop")), nil
 		}
-	case "org.mpris.MediaPlayer2.TimerPlayer":
+	case "org.mpris.MediaPlayer2.Player":
 		switch prop {
 		case "PlaybackStatus":
 			return dbus.MakeVariant(p.playbackStatus), nil
@@ -216,7 +216,7 @@ func (p *TimerPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error
 	case "org.mpris.MediaPlayer2":
 		props["Identity"] = dbus.MakeVariant("MPRIS Timer")
 		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop"))
-	case "org.mpris.MediaPlayer2.TimerPlayer":
+	case "org.mpris.MediaPlayer2.Player":
 		props["PlaybackStatus"] = dbus.MakeVariant(p.playbackStatus)
 		props["CanGoNext"] = dbus.MakeVariant(true)
 		props["CanGoPrevious"] = dbus.MakeVariant(true)

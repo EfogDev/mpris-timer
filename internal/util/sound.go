@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-//go:embed ding.mp3
+//go:embed resources/ding.mp3
 var sound []byte
 
 func PlaySound() error {
@@ -25,6 +25,7 @@ func PlaySound() error {
 
 	player := ctx.NewPlayer(dec)
 	defer func() { _ = player.Close() }()
+	player.SetVolume(Volume)
 	player.Play()
 
 	for player.IsPlaying() {

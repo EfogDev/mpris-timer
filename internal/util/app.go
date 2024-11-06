@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
-	"github.com/google/uuid"
 	"log"
 )
 
@@ -17,10 +16,4 @@ func RegisterApp(ctx context.Context) {
 	if err != nil {
 		log.Printf("error registering application: %v", err)
 	}
-}
-
-func ClearCache() {
-	// ToDo cleanup
-	id, _ := uuid.NewV7()
-	SetCachePrefix(id.String())
 }

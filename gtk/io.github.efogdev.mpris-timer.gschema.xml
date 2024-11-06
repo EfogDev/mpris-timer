@@ -40,6 +40,10 @@
 		<key name="cache-prefix" type="s">
 			<default>'default'</default>
 		</key>
+
+		<key name="volume" type="d">
+			<default>1</default>
+		</key>
 		
 	</schema>
 </schemalist>

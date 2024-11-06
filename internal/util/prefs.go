@@ -14,6 +14,7 @@ type Prefs struct {
 	Presets            []string
 	ProgressColor      string
 	EnableSound        bool
+	Volume             float64
 	EnableNotification bool
 	DefaultPreset      string
 	DefaultTitle       string
@@ -33,6 +34,7 @@ func LoadPrefs() {
 
 	UserPrefs = Prefs{
 		EnableSound:        settings.Boolean("enable-sound"),
+		Volume:             settings.Double("volume"),
 		EnableNotification: settings.Boolean("enable-notification"),
 		ShowPresets:        settings.Boolean("show-presets"),
 		PresetsOnRight:     settings.Boolean("presets-on-right"),
@@ -75,11 +77,13 @@ func SetPresetsOnRight(value bool) {
 }
 
 func SetEnableSound(value bool) {
+	Sound = true
 	UserPrefs.EnableSound = value
 	settings.SetBoolean("enable-sound", value)
 }
 
 func SetEnableNotification(value bool) {
+	Notify = true
 	UserPrefs.EnableNotification = value
 	settings.SetBoolean("enable-notification", value)
 }
@@ -89,6 +93,7 @@ func SetProgressColor(value string) {
 		return
 	}
 
+	Color = value
 	UserPrefs.ProgressColor = value
 	settings.SetString("progress-color", value)
 }
@@ -104,16 +109,19 @@ func SetDefaultPreset(value string) {
 }
 
 func SetDefaultTitle(value string) {
+	Title = value
 	UserPrefs.DefaultTitle = value
 	settings.SetString("default-title", value)
 }
 
 func SetDefaultText(value string) {
+	Text = value
 	UserPrefs.DefaultText = value
 	settings.SetString("default-text", value)
 }
 
-func SetCachePrefix(value string) {
-	UserPrefs.CachePrefix = value
-	settings.SetString("cache-prefix", value)
+func SetVolume(value float64) {
+	Volume = value
+	UserPrefs.Volume = value
+	settings.SetDouble("volume", value)
 }

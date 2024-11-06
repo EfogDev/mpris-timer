@@ -6,12 +6,13 @@ import (
 	"math"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 )
 
 func MakeProgressCircle(progress float64) (string, error) {
 	progress = math.Max(0, math.Min(100, progress))
-	filename := path.Join(CacheDir, fmt.Sprintf("%s.%.1f.svg", UserPrefs.CachePrefix, progress))
+	filename := path.Join(CacheDir, fmt.Sprintf("%s.%s.%.1f.svg", UserPrefs.CachePrefix, strings.Replace(Color, "#", "", 1), progress))
 
 	if _, err := os.Stat(filename); err == nil {
 		return filename, nil
@@ -32,7 +33,7 @@ func MakeProgressCircle(progress float64) (string, error) {
 		Radius:        radius,
 		BaseWidth:     baseWidth,
 		StrokeWidth:   strokeWidth,
-		FgStrokeColor: UserPrefs.ProgressColor,
+		FgStrokeColor: Color,
 		BgStrokeColor: bgStrokeColor,
 		Circumference: circumference,
 		DashOffset:    dashOffset,

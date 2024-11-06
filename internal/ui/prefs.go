@@ -14,8 +14,9 @@ import (
 const (
 	prefsMinWidth      = 300
 	prefsMinHeight     = 200
-	prefsDefaultWidth  = 400
-	prefsDefaultHeight = 600
+	prefsDefaultWidth  = 420
+	prefsDefaultHeight = 650
+	sliderWidth        = 150
 )
 
 var prefsWin *adw.PreferencesWindow
@@ -74,12 +75,36 @@ func NewPrefsWidgets(parent *gtk.Box) {
 }
 
 func PopulateTimerGroup(group *adw.PreferencesGroup) {
+	textEntry := adw.NewEntryRow()
+	volumeRow := adw.NewActionRow()
+	volumeSlider := gtk.NewScaleWithRange(gtk.OrientationHorizontal, 0, 100, 1)
+
 	soundSwitch := adw.NewSwitchRow()
 	soundSwitch.SetTitle("Enable sound")
 	soundSwitch.SetActive(util.UserPrefs.EnableSound)
 	soundSwitch.Connect("notify::active", func() {
 		util.SetEnableSound(soundSwitch.Active())
-		util.Sound = true
+		volumeRow.SetSensitive(util.UserPrefs.EnableSound)
+	})
+
+	volumePreviewCtrl := gtk.NewGestureClick()
+	volumePreviewCtrl.SetPropagationPhase(gtk.PhaseCapture)
+	volumePreviewCtrl.ConnectReleased(func(_ int, _ float64, _ float64) {
+		go util.PlaySound()
+	})
+
+	volumeRow.SetTitle("Sound volume")
+	volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Volume*100)))
+	volumeRow.SetSensitive(util.UserPrefs.EnableSound)
+	volumeRow.AddSuffix(volumeSlider)
+	volumeRow.AddController(volumePreviewCtrl)
+
+	volumeSlider.SetValue(util.Volume * 100)
+	volumeSlider.SetSizeRequest(sliderWidth, 0)
+	volumeSlider.ConnectChangeValue(func(scroll gtk.ScrollType, value float64) (ok bool) {
+		util.SetVolume(value / 100)
+		volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Volume*100)))
+		return false
 	})
 
 	notificationSwitch := adw.NewSwitchRow()
@@ -87,7 +112,7 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 	notificationSwitch.SetActive(util.UserPrefs.EnableNotification)
 	notificationSwitch.Connect("notify::active", func() {
 		util.SetEnableNotification(notificationSwitch.Active())
-		util.Notify = true
+		textEntry.SetSensitive(notificationSwitch.Active())
 	})
 
 	titleEntry := adw.NewEntryRow()
@@ -95,18 +120,16 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 	titleEntry.SetText(util.UserPrefs.DefaultTitle)
 	titleEntry.ConnectChanged(func() {
 		util.SetDefaultTitle(titleEntry.Text())
-		util.Title = titleEntry.Text()
 	})
 
-	textEntry := adw.NewEntryRow()
 	textEntry.SetTitle("Default text")
 	textEntry.SetText(util.UserPrefs.DefaultText)
+	textEntry.SetSensitive(util.UserPrefs.EnableNotification)
 	textEntry.ConnectChanged(func() {
 		util.SetDefaultText(textEntry.Text())
-		util.Text = textEntry.Text()
 	})
 
-	color, err := util.RGBAFromHex(util.UserPrefs.ProgressColor)
+	color, err := util.RGBAFromHex(util.Color)
 	if err != nil {
 		log.Fatalf("unexpected: nil color, %v (%s)", err, util.UserPrefs.ProgressColor)
 	}
@@ -122,12 +145,11 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 	colorRow.SetTitle("Progress color")
 
 	colorSwitch.Connect("notify", func() {
-		log.Printf("new color: %s", util.HexFromRGBA(colorSwitch.RGBA()))
 		util.SetProgressColor(util.HexFromRGBA(colorSwitch.RGBA()))
-		util.ClearCache()
 	})
 
 	group.Add(soundSwitch)
+	group.Add(volumeRow)
 	group.Add(notificationSwitch)
 	group.Add(titleEntry)
 	group.Add(textEntry)

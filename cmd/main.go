@@ -56,7 +56,7 @@ func main() {
 		// note: synchronous
 		if util.Sound {
 			log.Printf("sound requested")
-			err = ui.PlayAudio()
+			err = util.PlaySound()
 			if err != nil {
 				log.Printf("error playing sound file: %v", err)
 			}

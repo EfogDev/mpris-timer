@@ -12,6 +12,14 @@ Notifications included! Utilizing GTK4, Adwaita and MPRIS interface.
 
 ![ezgif-3-054839fb4c](https://github.com/user-attachments/assets/7994f964-b18e-4254-a141-9b5c149b1483)
 
+## Installation
+
+```shell
+flatpak install --user flathub io.github.efogdev.mpris-timer
+```
+
+## Development
+
 Run:
 
 ```shell
@@ -25,5 +33,5 @@ go build -tags native,waylan -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
 
 Flatpak:
 ```shell
-flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache --mirror-screenshots-url=https://dl.flathub.org/media/ .build io.github.efogdev.mpris-timer.yml
+flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache .build io.github.efogdev.mpris-timer.yml
 ```

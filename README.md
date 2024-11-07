@@ -22,11 +22,10 @@ flatpak install --user flathub io.github.efogdev.core-timer
 
 ## CLI use
 
->No UI will be shown if run with `start` flag.
 ```text
 Usage of mpris-timer:
   -color string
-    	Progress color for the player (default "#F6D32D")
+    	Progress color for the player, use "default" for the GTK accent color (default "default")
   -notify
     	Send desktop notification (default true)
   -silence int
@@ -34,7 +33,7 @@ Usage of mpris-timer:
   -sound
     	Play sound (default true)
   -start int
-    	Start the timer immediately
+    	Start the timer immediately, don't show UI
   -text string
     	Notification text (default "Time is up!")
   -title string

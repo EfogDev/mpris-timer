@@ -7,7 +7,6 @@ import (
 	"math"
 	"mpris-timer/internal/util"
 	"os"
-	"path"
 	"strconv"
 	"time"
 )
@@ -187,7 +186,7 @@ func (p *TimerPlayer) Get(iface, prop string) (dbus.Variant, *dbus.Error) {
 		case "Identity":
 			return dbus.MakeVariant("MPRIS Timer"), nil
 		case "DesktopEntry":
-			return dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop")), nil
+			return dbus.MakeVariant(util.AppId), nil
 		}
 	case "org.mpris.MediaPlayer2.Player":
 		switch prop {
@@ -215,7 +214,7 @@ func (p *TimerPlayer) GetAll(iface string) (map[string]dbus.Variant, *dbus.Error
 	switch iface {
 	case "org.mpris.MediaPlayer2":
 		props["Identity"] = dbus.MakeVariant("MPRIS Timer")
-		props["DesktopEntry"] = dbus.MakeVariant(path.Join(os.Getenv("PWD"), "misc", util.AppId+".desktop"))
+		props["DesktopEntry"] = dbus.MakeVariant(util.AppId)
 	case "org.mpris.MediaPlayer2.Player":
 		props["PlaybackStatus"] = dbus.MakeVariant(p.playbackStatus)
 		props["CanGoNext"] = dbus.MakeVariant(true)

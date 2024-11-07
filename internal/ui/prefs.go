@@ -201,7 +201,7 @@ func PopulatePresetsGroup(group *adw.PreferencesGroup) {
 
 	btnContent := adw.NewButtonContent()
 	btnContent.SetLabel("")
-	btnContent.SetIconName("plus")
+	btnContent.SetIconName("insert-text")
 
 	newPresetBtn.SetChild(btnContent)
 	newPresetBtn.AddCSSClass("add-preset-btn")
@@ -305,7 +305,7 @@ func RenderPresets(toAdd []string) {
 		btnContent := adw.NewButtonContent()
 		btnContent.SetHExpand(false)
 		btnContent.SetLabel("")
-		btnContent.SetIconName("trash")
+		btnContent.SetIconName("edit-delete")
 
 		btn := gtk.NewButton()
 		btn.SetChild(btnContent)
@@ -321,7 +321,7 @@ func RenderPresets(toAdd []string) {
 			}
 
 			util.SetPresets(presets)
-			presetsBox.Remove(row)
+			presetsBox.Remove(container)
 		})
 
 		box.Append(title)

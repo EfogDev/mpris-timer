@@ -12,7 +12,7 @@ import (
 
 func MakeProgressCircle(progress float64) (string, error) {
 	progress = math.Max(0, math.Min(100, progress))
-	filename := path.Join(CacheDir, fmt.Sprintf("%s.%s.%.1f.svg", UserPrefs.CachePrefix, strings.Replace(Color, "#", "", 1), progress))
+	filename := path.Join(CacheDir, fmt.Sprintf("%s.%s.%.2f.svg", UserPrefs.CachePrefix, strings.Replace(Color, "#", "", 1), progress))
 
 	if _, err := os.Stat(filename); err == nil {
 		return filename, nil

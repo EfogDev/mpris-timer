@@ -255,7 +255,7 @@ func NewContent() *adw.NavigationPage {
 	btnContent := adw.NewButtonContent()
 	btnContent.SetHExpand(false)
 	btnContent.SetLabel("Start")
-	btnContent.SetIconName("play")
+	btnContent.SetIconName("media-playback-start")
 
 	startBtn.SetCanFocus(false)
 	startBtn.SetChild(btnContent)
@@ -293,7 +293,7 @@ func NewContent() *adw.NavigationPage {
 	prefsBtnContent := adw.NewButtonContent()
 	prefsBtnContent.SetHExpand(false)
 	prefsBtnContent.SetLabel("")
-	prefsBtnContent.SetIconName("settings")
+	prefsBtnContent.SetIconName("preferences-system")
 
 	prefsBtn := gtk.NewButton()
 	prefsBtn.SetChild(prefsBtnContent)

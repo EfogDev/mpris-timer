@@ -8,7 +8,7 @@ Notifications included! Utilizing GTK4, Adwaita and MPRIS interface.
 >MPRIS Timer aims to be as keyboard friendly as possible.
 >Use navigation keys (arrows, tab, shift+tab, space, enter) or start inputting numbers right away.
 
-![image](https://github.com/user-attachments/assets/80c40dee-1a2f-4729-8f9b-89e5eeb934b9)
+![image](https://github.com/user-attachments/assets/3a6f6eb8-8e5f-4c16-a801-6e346bd4d100)
 
 ## Installation
 
@@ -18,7 +18,7 @@ flatpak install --user flathub io.github.efogdev.core-timer
 
 ## Preview
 
-![ezgif-3-054839fb4c](https://github.com/user-attachments/assets/7994f964-b18e-4254-a141-9b5c149b1483)
+![1](https://github.com/user-attachments/assets/2d441b65-ae7f-4183-a31a-562ba13cde03)
 
 ## Development
 

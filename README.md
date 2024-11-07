@@ -18,7 +18,7 @@ flatpak install --user flathub io.github.efogdev.core-timer
 
 ## Preview
 
-![1](https://github.com/user-attachments/assets/2d441b65-ae7f-4183-a31a-562ba13cde03)
+![2](https://github.com/user-attachments/assets/7be07479-85bb-44b1-9f6f-0fc85190c89e)
 
 ## CLI use
 

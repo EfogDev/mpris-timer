@@ -20,6 +20,31 @@ flatpak install --user flathub io.github.efogdev.core-timer
 
 ![1](https://github.com/user-attachments/assets/2d441b65-ae7f-4183-a31a-562ba13cde03)
 
+## CLI use
+
+>No UI will be shown if run with `start` flag.
+```text
+Usage of mpris-timer:
+  -color string
+    	Progress color for the player (default "#F6D32D")
+  -notify
+    	Send desktop notification (default true)
+  -silence int
+    	Play this milliseconds of silence before the actual audio — might be helpful for audio devices that wake up not immediately
+  -sound
+    	Play sound (default true)
+  -start int
+    	Start the timer immediately
+  -text string
+    	Notification text (default "Time is up!")
+  -title string
+    	Name/title of the timer (default "Timer")
+  -ui
+    	Show timepicker UI (default true)
+  -volume float
+    	Volume [0-1] (default 1)
+```
+
 ## Development
 
 Run:

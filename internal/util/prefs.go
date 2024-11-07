@@ -19,7 +19,9 @@ type Prefs struct {
 	DefaultPreset      string
 	DefaultTitle       string
 	DefaultText        string
-	CachePrefix        string
+
+	// ToDo
+	CachePrefix string
 }
 
 var (

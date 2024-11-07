@@ -2,8 +2,8 @@ package util
 
 import (
 	"context"
-	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
+	"github.com/efogdev/gotk4-adwaita/pkg/adw"
 	"log"
 )
 

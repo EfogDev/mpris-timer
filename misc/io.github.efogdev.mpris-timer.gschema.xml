@@ -26,7 +26,7 @@
 		</key>
 
 		<key name="progress-color" type="s">
-			<default>'#2190a4'</default>
+			<default>'default'</default>
 		</key>
 
 		<key name="enable-sound" type="b">

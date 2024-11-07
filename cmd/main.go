@@ -18,26 +18,26 @@ func main() {
 	util.LoadPrefs()
 	util.LoadFlags()
 
-	if util.UseUI && util.Duration > 0 {
+	if util.Overrides.UseUI && util.Overrides.Duration > 0 {
 		log.Fatalf("UI can't be used with -start")
 	}
 
 	// UI by default
-	if !util.UseUI && util.Duration == 0 {
-		util.UseUI = true
+	if !util.Overrides.UseUI && util.Overrides.Duration == 0 {
+		util.Overrides.UseUI = true
 	}
 
-	if util.UseUI {
+	if util.Overrides.UseUI {
 		log.Println("UI requested")
 		ui.Init()
 	}
 
-	timer, err := core.NewTimerPlayer(util.Duration, util.Title)
+	timer, err := core.NewTimerPlayer(util.Overrides.Duration, util.Overrides.Title)
 	if err != nil {
 		log.Fatalf("failed to create timer: %v", err)
 	}
 
-	log.Printf("timer requested: %d sec", util.Duration)
+	log.Printf("timer requested: %d sec", util.Overrides.Duration)
 	if err = timer.Start(); err != nil {
 		log.Fatalf("failed to start timer: %v", err)
 	}
@@ -50,16 +50,16 @@ func main() {
 		log.Println("timer done")
 		wg := sync.WaitGroup{}
 
-		if util.Notify {
+		if util.Overrides.Notify {
 			wg.Add(1)
 			log.Printf("desktop notification requested")
 			go func() {
-				ui.Notify(timer.Name, util.Text)
+				ui.Notify(timer.Name, util.Overrides.Text)
 				wg.Done()
 			}()
 		}
 
-		if util.Sound {
+		if util.Overrides.Sound {
 			wg.Add(1)
 			log.Printf("sound requested")
 			go func() {

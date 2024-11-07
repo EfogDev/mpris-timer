@@ -2,8 +2,8 @@ package ui
 
 import (
 	"fmt"
-	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
+	"github.com/efogdev/gotk4-adwaita/pkg/adw"
 	"log"
 	"mpris-timer/internal/util"
 	"slices"
@@ -94,16 +94,16 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 	})
 
 	volumeRow.SetTitle("Sound volume")
-	volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Volume*100)))
+	volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Overrides.Volume*100)))
 	volumeRow.SetSensitive(util.UserPrefs.EnableSound)
 	volumeRow.AddSuffix(volumeSlider)
 	volumeRow.AddController(volumePreviewCtrl)
 
-	volumeSlider.SetValue(util.Volume * 100)
+	volumeSlider.SetValue(util.Overrides.Volume * 100)
 	volumeSlider.SetSizeRequest(sliderWidth, 0)
 	volumeSlider.ConnectChangeValue(func(scroll gtk.ScrollType, value float64) (ok bool) {
 		util.SetVolume(value / 100)
-		volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Volume*100)))
+		volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Overrides.Volume*100)))
 		return false
 	})
 
@@ -129,7 +129,7 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 		util.SetDefaultText(textEntry.Text())
 	})
 
-	color, err := util.RGBAFromHex(util.Color)
+	color, err := util.RGBAFromHex(util.Overrides.Color)
 	if err != nil {
 		log.Fatalf("unexpected: nil color, %v (%s)", err, util.UserPrefs.ProgressColor)
 	}

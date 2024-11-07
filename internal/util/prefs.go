@@ -77,13 +77,13 @@ func SetPresetsOnRight(value bool) {
 }
 
 func SetEnableSound(value bool) {
-	Sound = true
+	Overrides.Sound = true
 	UserPrefs.EnableSound = value
 	settings.SetBoolean("enable-sound", value)
 }
 
 func SetEnableNotification(value bool) {
-	Notify = true
+	Overrides.Notify = true
 	UserPrefs.EnableNotification = value
 	settings.SetBoolean("enable-notification", value)
 }
@@ -93,7 +93,7 @@ func SetProgressColor(value string) {
 		return
 	}
 
-	Color = value
+	Overrides.Color = value
 	UserPrefs.ProgressColor = value
 	settings.SetString("progress-color", value)
 }
@@ -109,19 +109,19 @@ func SetDefaultPreset(value string) {
 }
 
 func SetDefaultTitle(value string) {
-	Title = value
+	Overrides.Title = value
 	UserPrefs.DefaultTitle = value
 	settings.SetString("default-title", value)
 }
 
 func SetDefaultText(value string) {
-	Text = value
+	Overrides.Text = value
 	UserPrefs.DefaultText = value
 	settings.SetString("default-text", value)
 }
 
 func SetVolume(value float64) {
-	Volume = value
+	Overrides.Volume = value
 	UserPrefs.Volume = value
 	settings.SetDouble("volume", value)
 }

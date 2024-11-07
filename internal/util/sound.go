@@ -24,14 +24,14 @@ func PlaySound() error {
 	}
 	<-ready
 
-	if Silence != 0 {
+	if Overrides.Silence != 0 {
 		log.Printf("silence requested")
-		playSilence(Silence)
+		playSilence(Overrides.Silence)
 	}
 
 	player := ctx.NewPlayer(dec)
 	defer func() { _ = player.Close() }()
-	player.SetVolume(Volume)
+	player.SetVolume(Overrides.Volume)
 	player.Play()
 
 	for player.IsPlaying() {

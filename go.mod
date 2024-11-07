@@ -3,8 +3,8 @@ module mpris-timer
 go 1.23.1
 
 require (
-	github.com/diamondburned/gotk4-adwaita/pkg v0.0.0-20240712143708-824c3ce8a5f4
 	github.com/diamondburned/gotk4/pkg v0.3.1
+	github.com/efogdev/gotk4-adwaita/pkg v0.0.0-20241107224354-1d53d3fb8980
 	github.com/godbus/dbus/v5 v5.1.0
 	github.com/google/uuid v1.6.0
 	github.com/hajimehoshi/go-mp3 v0.3.4

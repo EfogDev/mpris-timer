@@ -3,9 +3,9 @@ package ui
 import (
 	"context"
 	_ "embed"
-	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
 	"github.com/diamondburned/gotk4/pkg/glib/v2"
+	"github.com/efogdev/gotk4-adwaita/pkg/adw"
 	"github.com/google/uuid"
 	"log"
 	"mpris-timer/internal/util"
@@ -20,7 +20,7 @@ func Notify(title string, text string) {
 	// a workaround; could've used notify-send
 	// but then default click action is to open timer again
 	// which is not desired
-	if !util.UseUI {
+	if !util.Overrides.UseUI {
 		sendNotification(util.App, title, text)
 	} else {
 		nApp := adw.NewApplication(util.AppId, gio.ApplicationNonUnique)

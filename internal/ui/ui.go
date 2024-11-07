@@ -2,9 +2,9 @@ package ui
 
 import (
 	_ "embed"
-	"github.com/diamondburned/gotk4-adwaita/pkg/adw"
 	"github.com/diamondburned/gotk4/pkg/gdk/v4"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
+	"github.com/efogdev/gotk4-adwaita/pkg/adw"
 	"log"
 	"mpris-timer/internal/util"
 	"os"
@@ -51,7 +51,7 @@ func Init() {
 }
 
 func NewTimePicker(app *adw.Application) {
-	util.Duration = 0
+	util.Overrides.Duration = 0
 	win = adw.NewApplicationWindow(&app.Application)
 	handle := gtk.NewWindowHandle()
 	body := adw.NewOverlaySplitView()
@@ -267,7 +267,7 @@ func NewContent() *adw.NavigationPage {
 		time := util.TimeFromStrings(hrsLabel.Text(), minLabel.Text(), secLabel.Text())
 		seconds := time.Hour()*60*60 + time.Minute()*60 + time.Second()
 		if seconds > 0 {
-			util.Duration = seconds
+			util.Overrides.Duration = seconds
 			win.Close()
 			return
 		}

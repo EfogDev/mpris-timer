@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-type overrides struct {
+var Overrides = struct {
 	Notify   bool
 	Sound    bool
 	Volume   float64
@@ -16,9 +16,7 @@ type overrides struct {
 	Title    string
 	Text     string
 	Color    string
-}
-
-var Overrides = overrides{}
+}{}
 
 func LoadFlags() {
 	flag.BoolVar(&Overrides.Notify, "notify", UserPrefs.EnableNotification, "Send desktop notification")

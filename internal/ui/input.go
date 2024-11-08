@@ -171,12 +171,12 @@ func setupTimeEntry(entry *gtk.Entry, prev *gtk.Widget, next *gtk.Widget, maxVal
 			}
 		}
 
+		// now we are interested only in numbers
 		isNumber := util.IsGdkKeyvalNumber(keyval)
 		if !isNumber && !slices.Contains(allowedKeyvals, keyval) {
 			return true
 		}
 
-		// now we are interested only in numbers
 		if !isNumber {
 			return false
 		}

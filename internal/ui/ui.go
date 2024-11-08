@@ -153,33 +153,23 @@ func NewSidebar() *adw.NavigationPage {
 			initialPreset = child
 		}
 
-		if idx%2 == 0 && util.UserPrefs.PresetsOnRight {
-			leftKeyCtrl := gtk.NewEventControllerKey()
-			leftKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
-			leftKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
-				if keyval == gdk.KEY_Left && state == gdk.NoModifierMask {
-					secLabel.GrabFocus()
-					return true
-				}
+		keyCtrl := gtk.NewEventControllerKey()
+		keyCtrl.SetPropagationPhase(gtk.PhaseCapture)
+		keyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
+			if keyval == gdk.KEY_Left && state == gdk.NoModifierMask && idx%2 == 0 && util.UserPrefs.PresetsOnRight {
+				secLabel.GrabFocus()
+				return true
+			}
 
-				return false
-			})
+			if keyval == gdk.KEY_Right && state == gdk.NoModifierMask && idx%2 == 1 && !util.UserPrefs.PresetsOnRight {
+				minLabel.GrabFocus()
+				return true
+			}
 
-			child.AddController(leftKeyCtrl)
-		} else if idx%2 == 1 && !util.UserPrefs.PresetsOnRight {
-			rightKeyCtrl := gtk.NewEventControllerKey()
-			rightKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
-			rightKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
-				if keyval == gdk.KEY_Right && state == gdk.NoModifierMask {
-					minLabel.GrabFocus()
-					return true
-				}
+			return false
+		})
 
-				return false
-			})
-
-			child.AddController(rightKeyCtrl)
-		}
+		child.AddController(keyCtrl)
 	}
 
 	scrolledWindow := gtk.NewScrolledWindow()

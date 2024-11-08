@@ -22,7 +22,7 @@
 		</key>
 
 		<key name="activate-preset" type="b">
-			<default>true</default>
+			<default>false</default>
 		</key>
 
 		<key name="presets" type="as">

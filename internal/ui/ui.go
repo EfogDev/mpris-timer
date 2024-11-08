@@ -153,7 +153,7 @@ func NewSidebar() *adw.NavigationPage {
 			initialPreset = child
 		}
 
-		if idx == 0 && util.UserPrefs.PresetsOnRight {
+		if idx%2 == 0 && util.UserPrefs.PresetsOnRight {
 			leftKeyCtrl := gtk.NewEventControllerKey()
 			leftKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
 			leftKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
@@ -166,9 +166,7 @@ func NewSidebar() *adw.NavigationPage {
 			})
 
 			child.AddController(leftKeyCtrl)
-		}
-
-		if idx == len(util.UserPrefs.Presets)-1 && !util.UserPrefs.PresetsOnRight {
+		} else if idx%2 == 1 && !util.UserPrefs.PresetsOnRight {
 			rightKeyCtrl := gtk.NewEventControllerKey()
 			rightKeyCtrl.SetPropagationPhase(gtk.PhaseCapture)
 			rightKeyCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {

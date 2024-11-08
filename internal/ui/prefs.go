@@ -2,6 +2,7 @@ package ui
 
 import (
 	"fmt"
+	"github.com/diamondburned/gotk4/pkg/gdk/v4"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"github.com/efogdev/gotk4-adwaita/pkg/adw"
 	"log"
@@ -19,15 +20,30 @@ const (
 	sliderWidth        = 150
 )
 
-var prefsWin *adw.PreferencesWindow
+var prefsWin *adw.Window
 
 func NewPrefsWindow() {
-	prefsWin = adw.NewPreferencesWindow()
+	prefsWin = adw.NewWindow()
 	prefsWin.SetTitle("Preferences")
 	prefsWin.SetSizeRequest(prefsMinWidth, prefsMinHeight)
 	prefsWin.SetDefaultSize(prefsDefaultWidth, prefsDefaultHeight)
 
-	header := gtk.NewHeaderBar()
+	escCtrl := gtk.NewEventControllerKey()
+	escCtrl.SetPropagationPhase(gtk.PhaseCapture)
+	escCtrl.ConnectKeyPressed(func(keyval, keycode uint, state gdk.ModifierType) (ok bool) {
+		if keyval == gdk.KEY_Escape {
+			prefsWin.Close()
+			return true
+		}
+
+		return false
+	})
+
+	header := adw.NewHeaderBar()
+	view := adw.NewToolbarView()
+	view.SetTopBarStyle(adw.ToolbarFlat)
+	view.AddTopBar(header)
+
 	box := gtk.NewBox(gtk.OrientationVertical, 8)
 	box.SetVExpand(true)
 	box.AddCSSClass("prefs-inner")
@@ -47,7 +63,9 @@ func NewPrefsWindow() {
 	outerBox.Append(header)
 	outerBox.Append(scrolledWindow)
 
-	prefsWin.SetContent(outerBox)
+	view.SetContent(outerBox)
+	prefsWin.AddController(escCtrl)
+	prefsWin.SetContent(view)
 	prefsWin.SetVisible(true)
 	prefsWin.Activate()
 	prefsWin.GrabFocus()
@@ -102,6 +120,12 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 	volumeSlider.SetValue(util.Overrides.Volume * 100)
 	volumeSlider.SetSizeRequest(sliderWidth, 0)
 	volumeSlider.ConnectChangeValue(func(scroll gtk.ScrollType, value float64) (ok bool) {
+		// GTK (probably) bug, with mouse wheel scale goes up to 110
+		if value > 100 {
+			value = 100
+			volumeSlider.SetValue(value)
+		}
+
 		util.SetVolume(value / 100)
 		volumeRow.SetSubtitle(fmt.Sprintf("%v%%", int(util.Overrides.Volume*100)))
 		return false

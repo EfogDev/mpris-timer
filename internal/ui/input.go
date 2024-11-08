@@ -55,10 +55,7 @@ func setupTimeEntry(entry *gtk.Entry, prev *gtk.Widget, next *gtk.Widget, maxVal
 	focusCtrl.SetPropagationPhase(gtk.PhaseTarget)
 	focusCtrl.ConnectLeave(func() {
 		formatValue()
-
-		if entry.HasFocus() {
-			entry.SelectRegion(0, 0)
-		}
+		entry.SelectRegion(0, 0)
 	})
 
 	kbCtrl := gtk.NewEventControllerKey()

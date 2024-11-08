@@ -102,6 +102,13 @@ func NewTimePicker(app *adw.Application) {
 	if initialPreset != nil {
 		initialPreset.Activate()
 		initialPreset.GrabFocus()
+
+		if !util.UserPrefs.ActivatePreset {
+			minLabel.SetText("00")
+			secLabel.SetText("00")
+		} else {
+			startBtn.GrabFocus()
+		}
 	}
 
 	win.Present()

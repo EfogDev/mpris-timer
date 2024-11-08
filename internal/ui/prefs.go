@@ -159,6 +159,7 @@ func PopulateTimerGroup(group *adw.PreferencesGroup) {
 func PopulatePresetsGroup(group *adw.PreferencesGroup) {
 	newPresetBtn := gtk.NewButton()
 	defaultPresetSelect := adw.NewComboRow()
+	activatePresetSwitch := adw.NewSwitchRow()
 
 	presetsOnRightSwitch = adw.NewSwitchRow()
 	presetsOnRightSwitch.SetTitle("Presets on right side")
@@ -177,6 +178,7 @@ func PopulatePresetsGroup(group *adw.PreferencesGroup) {
 		util.SetShowPresets(showPresetsSwitch.Active())
 		presetsOnRightSwitch.SetSensitive(showPresetsSwitch.Active())
 		defaultPresetSelect.SetSensitive(showPresetsSwitch.Active())
+		activatePresetSwitch.SetSensitive(showPresetsSwitch.Active())
 		presetsBox.SetVisible(showPresetsSwitch.Active())
 		newPresetBtn.SetVisible(showPresetsSwitch.Active())
 	})
@@ -190,6 +192,13 @@ func PopulatePresetsGroup(group *adw.PreferencesGroup) {
 	defaultPresetSelect.Connect("notify::selected", func() {
 		preset := util.UserPrefs.Presets[defaultPresetSelect.Selected()]
 		util.SetDefaultPreset(preset)
+	})
+
+	activatePresetSwitch.SetTitle("Activate automatically")
+	activatePresetSwitch.SetSensitive(util.UserPrefs.ShowPresets)
+	activatePresetSwitch.SetActive(util.UserPrefs.ActivatePreset)
+	activatePresetSwitch.Connect("notify::active", func() {
+		util.SetActivatePreset(activatePresetSwitch.Active())
 	})
 
 	presetsBox = gtk.NewListBox()
@@ -219,6 +228,7 @@ func PopulatePresetsGroup(group *adw.PreferencesGroup) {
 	group.Add(showPresetsSwitch)
 	group.Add(presetsOnRightSwitch)
 	group.Add(defaultPresetSelect)
+	group.Add(activatePresetSwitch)
 	group.Add(presetsBox)
 	group.Add(footer)
 }

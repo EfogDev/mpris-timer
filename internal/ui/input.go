@@ -187,31 +187,27 @@ func setupTimeEntry(entry *gtk.Entry, prev *gtk.Widget, next *gtk.Widget, maxVal
 			return true
 		}
 
-		if len(val) != 1 {
-			return false
-		}
-
-		// section finished
-		newVal, err := strconv.Atoi(val + util.ParseKeyval(keyval))
-		if err != nil {
-			log.Printf("error converting keyval: %v", err)
-			return true
-		}
-
-		if newVal > maxVal {
-			entry.SetText(util.NumToLabelText(maxVal))
-			return true
-		}
-
 		return false
 	})
 
 	entry.ConnectChanged(func() {
 		val := entry.Text()
-
-		if len(val) == 2 && entry.HasFocus() {
-			next.GrabFocus()
+		selStart, selEnd, _ := entry.SelectionBounds()
+		if len(val) != 2 || !(selStart == 2 && selEnd == 2) {
+			return
 		}
+
+		numVal, err := strconv.Atoi(val)
+		if err != nil {
+			log.Printf("error converting value: %v", err)
+			return
+		}
+
+		if numVal > maxVal {
+			entry.SetText(util.NumToLabelText(maxVal))
+		}
+
+		next.GrabFocus()
 	})
 
 	entry.AddController(kbCtrl)

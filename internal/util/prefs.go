@@ -19,6 +19,7 @@ type Prefs struct {
 	DefaultPreset      string
 	DefaultTitle       string
 	DefaultText        string
+	ActivatePreset     bool
 
 	// ToDo
 	CachePrefix string
@@ -46,6 +47,7 @@ func LoadPrefs() {
 		DefaultTitle:       settings.String("default-title"),
 		DefaultText:        settings.String("default-text"),
 		CachePrefix:        settings.String("cache-prefix"),
+		ActivatePreset:     settings.Boolean("activate-preset"),
 	}
 }
 
@@ -88,6 +90,11 @@ func SetEnableNotification(value bool) {
 	Overrides.Notify = true
 	UserPrefs.EnableNotification = value
 	settings.SetBoolean("enable-notification", value)
+}
+
+func SetActivatePreset(value bool) {
+	UserPrefs.ActivatePreset = value
+	settings.SetBoolean("activate-preset", value)
 }
 
 func SetProgressColor(value string) {

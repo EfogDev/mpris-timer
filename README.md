@@ -61,3 +61,8 @@ Flatpak:
 ```shell
 flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache .build io.github.efogdev.core-timer.yml
 ```
+
+## ToDo
+
+1) Custom sounds
+2) Custom backward/forward buttons behavior 

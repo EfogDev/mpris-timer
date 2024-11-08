@@ -2,7 +2,7 @@
 	<schema id="io.github.efogdev.mpris-timer" path="/io/github/efogdev/mpris-timer/">
 
 		<key name="default-preset" type="s">
-			<default>'01:00'</default>
+			<default>'01:30'</default>
 		</key>
 
 		<key name="default-title" type="s">

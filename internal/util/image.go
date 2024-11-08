@@ -10,6 +10,8 @@ import (
 	"text/template"
 )
 
+var tpl = template.New("svg")
+
 func MakeProgressCircle(progress float64) (string, error) {
 	progress = math.Max(0, math.Min(100, progress))
 	filename := path.Join(CacheDir, fmt.Sprintf("%s.%.2f.svg", strings.Replace(Overrides.Color, "#", "", 1), progress))
@@ -39,13 +41,13 @@ func MakeProgressCircle(progress float64) (string, error) {
 		DashOffset:    dashOffset,
 	}
 
-	tmpl, err := template.New("svg").Parse(svgTemplate)
+	svgString, err := tpl.Parse(svgTemplate)
 	if err != nil {
 		return "", err
 	}
 
 	var svgBuffer bytes.Buffer
-	err = tmpl.Execute(&svgBuffer, data)
+	err = svgString.Execute(&svgBuffer, data)
 	if err != nil {
 		return "", err
 	}

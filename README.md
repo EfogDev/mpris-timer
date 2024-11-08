@@ -29,7 +29,7 @@ Usage of mpris-timer:
   -notify
     	Send desktop notification (default true)
   -silence int
-    	Play this milliseconds of silence before the actual audio — might be helpful for audio devices that wake up not immediately
+    	Play this milliseconds of silence before the actual sound — might be helpful for audio devices that wake up not immediately
   -sound
     	Play sound (default true)
   -start int

@@ -59,7 +59,7 @@ go build -tags native,wayland -ldflags="-s -w" -o ./.bin/app ./cmd/main.go
 
 Flatpak:
 ```shell
-flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache .build io.github.efogdev.core-timer.yml
+flatpak run org.flatpak.Builder --force-clean --sandbox --user --install --install-deps-from=flathub --ccache .build io.github.efogdev.mpris-timer.yml
 ```
 
 ## ToDo

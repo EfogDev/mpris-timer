@@ -13,7 +13,7 @@ Notifications included! Utilizing GTK4, Adwaita and MPRIS interface.
 ## Installation
 
 ```shell
-flatpak install --user flathub io.github.efogdev.core-timer
+flatpak install --user flathub io.github.efogdev.mpris-timer
 ```
 
 ## Preview
